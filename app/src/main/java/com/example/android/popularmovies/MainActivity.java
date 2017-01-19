@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTextView = (TextView) findViewById(R.id.tv_try_work);
 
+        //TODO
         new FetchMovieTask().execute(NetworkUtilities.POPULAR);
     }
 
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showErrorMessage() {
+        //TODO
         mTextView.setText("!!!ERRORE!!!");
     }
 
