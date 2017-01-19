@@ -5,5 +5,5 @@ package com.example.android.popularmovies.utilities;
  */
 
 public class NetworkUtilities {
-  public String password = "gianni";
+
 }
