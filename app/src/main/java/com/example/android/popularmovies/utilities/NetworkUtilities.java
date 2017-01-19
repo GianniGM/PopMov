@@ -20,7 +20,7 @@ public class NetworkUtilities {
     public final static String TOP_RATED = "top_rated";
 
     private final static String TAG = NetworkUtilities.class.getSimpleName();
-    private final static String api_key = "[INSERT APY KEY HERE]";
+    private final static String api_key = "999999999999";
 
     final static String QUERY_APY_KEY = "api_key";
     final static String TYPE = "movie";
