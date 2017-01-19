@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 /**
  * Created by giannig on 19/01/17.
+ * this is some utilities for build urls and simple doing GET requests
  */
 
 public class NetworkUtilities {
