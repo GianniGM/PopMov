@@ -13,8 +13,6 @@ import org.json.JSONObject;
 
 public class JsonDataParser {
 
-
-
     public final static String TITLE = "title";
     public final static String ORIGINAL_TITLE = "original_title";
     public final static String POSTER = "poster_path";
@@ -27,13 +25,23 @@ public class JsonDataParser {
 
     /** get interested value from JSONObject
      *
-     * @param movieJsonString JsonString of received data of the selected movie
-     * @param key i want in movieJSONString
+     * @param dataString Row Received jsonString
+     * @param index index on movies array
+     * @param key of value i wanna search
      * @return value of key
+     * @throws JSONException
      */
-    public static String getMovieInfo(String movieJsonString, String key) throws JSONException {
-        //TODO
-        JSONObject movieJSON = new JSONObject(movieJsonString);
+    public static String getMovieInfo(String dataString, int index, String key) throws JSONException {
+
+        JSONArray results = getResults(dataString);
+        if(results == null){
+            return null;
+        }
+
+        JSONObject movieJSON = results.getJSONObject(index);
+        if(movieJSON == null){
+            return null;
+        }
 
         if(movieJSON.has(SUCCES)){
             if(!movieJSON.getBoolean(SUCCES)){
@@ -53,10 +61,21 @@ public class JsonDataParser {
      * @param dataString row JSONString received from GET request
      * @return url's poster array
      */
-    public static String[] getPosters(JSONObject dataString){
-        //TODO
+    public static String[] getPosters(String dataString) throws JSONException {
 
-        return null;
+        JSONArray results = getResults(dataString);
+
+        if(results == null || results.length() == 0){
+            return null;
+        }
+
+        String[] posters = new String[results.length()];
+
+        for (int i = 0; i < results.length(); i++) {
+            posters[i] = results.getJSONObject(i).getString(POSTER);
+        }
+
+        return posters;
     }
 
     /**Returns movie results from JSONString

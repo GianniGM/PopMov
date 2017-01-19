@@ -27,7 +27,7 @@ public class NetworkUtilities {
     final static String TYPE = "movie";
 
     //TODO sistemare questo
-    private final static String BASE_URL = "https://api.themoviedb.org/3/";
+    private final static String BASE_URL = "http://api.themoviedb.org/3/";
 
 
     public static URL BuildUrl(String request){
@@ -48,6 +48,11 @@ public class NetworkUtilities {
         Log.v(TAG, "URI: " + url);
 
         return url;
+    }
+
+    public static String imageURLBuilder(String imagePath){
+
+        return null;
     }
 
     public static String getResponseFromHttp(URL url) throws IOException {
