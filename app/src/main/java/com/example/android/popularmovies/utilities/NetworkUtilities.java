@@ -26,7 +26,6 @@ public class NetworkUtilities {
     final static String QUERY_APY_KEY = "api_key";
     final static String TYPE = "movie";
 
-    //TODO sistemare questo
     private final static String BASE_URL = "http://api.themoviedb.org/3/";
 
 
@@ -51,8 +50,10 @@ public class NetworkUtilities {
     }
 
     public static String imageURLBuilder(String imagePath){
+        final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/";
+        final String IMAGE_SIZE = "w500/";
 
-        return null;
+        return IMAGE_BASE_URL + IMAGE_SIZE + imagePath;
     }
 
     public static String getResponseFromHttp(URL url) throws IOException {

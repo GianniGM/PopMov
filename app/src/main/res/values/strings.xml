@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="error_msg">An Error has occurred, check your Internet connection!</string>
 </resources>

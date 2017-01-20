@@ -1,14 +1,12 @@
 package com.example.android.popularmovies.utilities;
 
-import android.nfc.Tag;
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by giannig on 19/01/17.
+ * Utility for parsing json received data
  */
 
 public class JsonDataParser {
@@ -20,7 +18,7 @@ public class JsonDataParser {
     public final static String RELEASE_DATE = "release_date";
 
     private final static String RESULTS = "results";
-    private final static String SUCCES = "succes";
+    private final static String SUCCESS = "success";
 
 
     /** get interested value from JSONObject
@@ -43,8 +41,8 @@ public class JsonDataParser {
             return null;
         }
 
-        if(movieJSON.has(SUCCES)){
-            if(!movieJSON.getBoolean(SUCCES)){
+        if(movieJSON.has(SUCCESS)){
+            if(!movieJSON.getBoolean(SUCCESS)){
                 return null;
             }
         }
@@ -87,8 +85,8 @@ public class JsonDataParser {
     public static JSONArray getResults(String movieStringJson) throws JSONException {
         JSONObject movieJSON = new JSONObject(movieStringJson);
 
-        if(movieJSON.has(SUCCES)){
-            if(!movieJSON.getBoolean(SUCCES)){
+        if(movieJSON.has(SUCCESS)){
+            if(!movieJSON.getBoolean(SUCCESS)){
                 return null;
             }
         }
