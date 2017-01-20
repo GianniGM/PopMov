@@ -38,7 +38,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
     public interface MovieAdapterOnClickHandler {
-        void onClick(String movieDetails);
+        void onClick(int movieDetails);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             //TODO QUA DEVI PASSARE I DATI CHE TI SERVONO NON IL POSTER
             int adapterPosition = getAdapterPosition();
 
-            mClickHandler.onClick(String.valueOf(adapterPosition));
+            mClickHandler.onClick(adapterPosition);
         }
     }
 }

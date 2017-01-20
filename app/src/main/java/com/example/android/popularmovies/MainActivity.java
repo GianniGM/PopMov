@@ -1,12 +1,11 @@
 package com.example.android.popularmovies;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private TextView mErrorMessageTextView;
 
     private ProgressBar mLoadingData;
+    private String jsonResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +66,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void onClick(String movieDetails) {
-        Toast.makeText(this, "hai tappato!!!" + movieDetails,Toast.LENGTH_LONG).show();
+    public void onClick(int movieDetails) {
+
+        String s = null;
+        try {
+            s = JsonDataParser.getMovieInfo(jsonResponse, movieDetails);
+            Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public class FetchMovieTask extends AsyncTask <String, Void, String[]>{
@@ -90,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             Log.d("url: ", movies.toString());
 
             try{
-                String jsonResponse = NetworkUtilities.getResponseFromHttp(movies);
+                jsonResponse = NetworkUtilities.getResponseFromHttp(movies);
 
                 //TODO remove me after added intents
 //                Log.d("FILM_INFO", JsonDataParser.getMovieInfo(jsonResponse, 3, JsonDataParser.OVERVIEW));

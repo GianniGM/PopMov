@@ -82,7 +82,7 @@ public class JsonDataParser {
      * @return JSONArray with results
      * @throws JSONException
      */
-    public static JSONArray getResults(String movieStringJson) throws JSONException {
+    private static JSONArray getResults(String movieStringJson) throws JSONException {
         JSONObject movieJSON = new JSONObject(movieStringJson);
 
         if(movieJSON.has(SUCCESS)){
@@ -98,5 +98,14 @@ public class JsonDataParser {
         }
 
         return results;
+    }
+
+    public static String getMovieInfo(String movieStringJson, int index) throws JSONException {
+        JSONArray array = getResults(movieStringJson);
+
+        if( array == null)
+            return "";
+
+        return array.getJSONObject(index).toString();
     }
 }
