@@ -24,19 +24,13 @@ public class JsonDataParser {
     /** get interested value from JSONObject
      *
      * @param dataString Row Received jsonString
-     * @param index index on movies array
      * @param key of value i wanna search
      * @return value of key
      * @throws JSONException
      */
-    public static String getMovieInfo(String dataString, int index, String key) throws JSONException {
+    public static String getMovieInfo(String dataString, String key) throws JSONException {
 
-        JSONArray results = getResults(dataString);
-        if(results == null){
-            return null;
-        }
-
-        JSONObject movieJSON = results.getJSONObject(index);
+        JSONObject movieJSON = new JSONObject(dataString);
         if(movieJSON == null){
             return null;
         }

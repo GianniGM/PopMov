@@ -1,6 +1,7 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -71,15 +72,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onClick(int movieDetails) {
 
-        String s = null;
+        String s;
         try {
             s = JsonDataParser.getMovieInfo(jsonResponse, movieDetails);
-            Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+
+            //// TODO: 20/01/17
+            Toast.makeText(this, "Error on receiving data", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        Context ctx = this;
+         Class destClass = DetailActivity.class;
+
+        Intent intentToStartActivity = new Intent(ctx, destClass);
+        intentToStartActivity.putExtra(Intent.EXTRA_TEXT, s);
+
+        startActivity(intentToStartActivity);
     }
 
     @Override
