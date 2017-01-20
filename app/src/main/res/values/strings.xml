@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Popular Movies</string>
     <string name="error_msg">An Error has occurred, check your Internet connection!</string>
+    <string name="string_top_rated">Top rated</string>
+    <string name="most_popular">Most Popular</string>
 </resources>

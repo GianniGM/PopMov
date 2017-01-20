@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -77,6 +80,34 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.action_top_rated){
+            mMovieAdapter.setMovieAdapterData(null);
+            new FetchMovieTask().execute(NetworkUtilities.TOP_RATED);
+            showData();
+
+        }
+
+        if(id == R.id.action_popular){
+            mMovieAdapter.setMovieAdapterData(null);
+            new FetchMovieTask().execute(NetworkUtilities.POPULAR);
+            showData();
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public class FetchMovieTask extends AsyncTask <String, Void, String[]>{
