@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.popularmovies.utilities.JsonDataParser;
 import com.example.android.popularmovies.utilities.NetworkUtilities;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onClick(String movieDetails) {
-
+        Toast.makeText(this, "hai tappato!!!" + movieDetails,Toast.LENGTH_LONG).show();
     }
 
     public class FetchMovieTask extends AsyncTask <String, Void, String[]>{

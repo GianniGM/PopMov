@@ -9,6 +9,6 @@
         android:layout_height="match_parent"
         android:id="@+id/iv_view_poster"
         android:layout_gravity="center|fill"
-        android:paddingTop="8dp"
+        android:padding="8dp"
       />
 </FrameLayout>
