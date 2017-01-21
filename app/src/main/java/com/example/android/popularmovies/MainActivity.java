@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        //TODO
         new FetchMovieTask().execute(NetworkUtilities.POPULAR);
     }
 
@@ -141,9 +140,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
             try{
                 jsonResponse = NetworkUtilities.getResponseFromHttp(movies);
-
-                //TODO remove me after added intents
-//                Log.d("FILM_INFO", JsonDataParser.getMovieInfo(jsonResponse, 3, JsonDataParser.OVERVIEW));
 
                 Log.d("FILM_INFO", jsonResponse);
 

@@ -24,8 +24,8 @@ public class NetworkUtilities {
     private final static String api_key = "INSERT YOU API KEY HERE";
 
 
-    final static String QUERY_APY_KEY = "api_key";
-    final static String TYPE = "movie";
+    private final static String QUERY_APY_KEY = "api_key";
+    private final static String TYPE = "movie";
 
     private final static String BASE_URL = "http://api.themoviedb.org/3/";
 

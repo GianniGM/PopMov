@@ -1,7 +1,6 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +10,6 @@ import android.widget.ImageView;
 
 import com.example.android.popularmovies.utilities.NetworkUtilities;
 import com.squareup.picasso.Picasso;
-
-import java.net.URL;
 
 /**
  * Created by giannig on 20/01/17.
@@ -43,7 +40,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //create element view
 
         ctx = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(ctx);

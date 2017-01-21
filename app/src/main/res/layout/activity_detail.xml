@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
         android:textSize="30sp"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp" />
 
 
     <LinearLayout
@@ -59,13 +59,18 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <TextView
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_overview"
-        android:textSize="21sp"
-        android:layout_margin="8dp"/>
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_overview"
+            android:textSize="21sp"
+            android:padding="8dp"
+       />
+    </ScrollView>
 
 
 </LinearLayout>

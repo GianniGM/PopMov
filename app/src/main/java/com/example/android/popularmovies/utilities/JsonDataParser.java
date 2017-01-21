@@ -33,9 +33,6 @@ public class JsonDataParser {
     public static String getMovieInfo(String dataString, String key) throws JSONException {
 
         JSONObject movieJSON = new JSONObject(dataString);
-        if(movieJSON == null){
-            return null;
-        }
 
         if(movieJSON.has(SUCCESS)){
             if(!movieJSON.getBoolean(SUCCESS)){

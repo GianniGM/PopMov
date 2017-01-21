@@ -17,34 +17,24 @@ public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
 
-    private TextView mTitleTextView;
-    private TextView mOverviewMovie;
-
-    private ImageView mImageViewPoster;
-
-    private TextView mUserRating;
-    private TextView mReleaseDate;
-
-    private String mMovieInfos;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        mTitleTextView = (TextView) findViewById(R.id.tv_title_textview);
-        mOverviewMovie = (TextView) findViewById(R.id.tv_overview);
-        mUserRating = (TextView) findViewById(R.id.tv_user_ratings);
-        mReleaseDate = (TextView) findViewById(R.id.tv_release_date);
+        TextView mTitleTextView = (TextView) findViewById(R.id.tv_title_textview);
+        TextView mOverviewMovie = (TextView) findViewById(R.id.tv_overview);
+        TextView mUserRating = (TextView) findViewById(R.id.tv_user_ratings);
+        TextView mReleaseDate = (TextView) findViewById(R.id.tv_release_date);
 
-        mImageViewPoster = (ImageView) findViewById(R.id.iv_image_detail);
+        ImageView mImageViewPoster = (ImageView) findViewById(R.id.iv_image_detail);
 
         Intent intentThatStartedThis = getIntent();
 
 
         if(intentThatStartedThis != null){
             if(intentThatStartedThis.hasExtra(Intent.EXTRA_TEXT)){
-                mMovieInfos = intentThatStartedThis.getStringExtra(Intent.EXTRA_TEXT);
+                String mMovieInfos = intentThatStartedThis.getStringExtra(Intent.EXTRA_TEXT);
 
                 String title;
                 String overview;
@@ -71,13 +61,11 @@ public class DetailActivity extends AppCompatActivity {
                 mUserRating.append(" " + userRating);
                 mReleaseDate.append(" " + releaseDate);
 
-                //TODO picasso image
                 String url;
-
                 try {
                     String image = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.POSTER);
                     url = NetworkUtilities.imageURLBuilder(image);
-                    Log.d(TAG, "URL BUILDED: " + url);
+                    Log.d(TAG, "RECEIVED URL: " + url);
                     Picasso.with(this)
                             .load(url)
                             .into(mImageViewPoster);
@@ -85,9 +73,6 @@ public class DetailActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-                //TODO ELIMIANRE HARDCODING
             }
         }
 
