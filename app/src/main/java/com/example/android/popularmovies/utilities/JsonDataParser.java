@@ -16,6 +16,8 @@ public class JsonDataParser {
     public final static String POSTER = "poster_path";
     public final static String OVERVIEW = "overview";
     public final static String RELEASE_DATE = "release_date";
+    public static final String USER_RATING = "vote_average";
+
 
     private final static String RESULTS = "results";
     private final static String SUCCESS = "success";

@@ -7,31 +7,65 @@
     android:orientation="vertical"
     tools:context="com.example.android.popularmovies.DetailActivity">
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:id="@+id/tv_title_textview"
+        style="@style/Base.TextAppearance.AppCompat.Title"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:layout_margin="8dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/iv_image_detail"
-            android:visibility="gone"/>
+            android:layout_margin="8dp"
+            />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/tv_title_textview"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:layout_gravity="center_horizontal"
-            android:textAlignment="center"
-            android:textSize="42sp"/>
+            android:orientation="vertical"
+            android:padding="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:id="@+id/tv_release_date"
+                android:text="@string/released"
+                android:layout_marginBottom="8dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/duration"
+                android:textSize="20sp"
+                android:id="@+id/tv_user_ratings"
+                android:layout_marginBottom="8dp"/>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_overview"/>
+        android:id="@+id/tv_overview"
+        android:textSize="21sp"
+        android:layout_margin="8dp"/>
+
 
 </LinearLayout>
