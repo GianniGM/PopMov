@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private ProgressBar mLoadingData;
     private String jsonResponse;
 
+    private static String status = NetworkUtilities.POPULAR;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,15 +49,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mLoadingData = (ProgressBar) findViewById(R.id.pb_loading_data);
 
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
         GridLayoutManager layoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.cols_number));
         mRecyclerView.setLayoutManager(layoutManager);
 
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        new FetchMovieTask().execute(NetworkUtilities.POPULAR);
+        new FetchMovieTask().execute(status);
     }
 
     private void showErrorMessage() {
@@ -103,15 +103,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int id = item.getItemId();
 
         if(id == R.id.action_top_rated){
+            status = NetworkUtilities.TOP_RATED;
             mMovieAdapter.setMovieAdapterData(null);
-            new FetchMovieTask().execute(NetworkUtilities.TOP_RATED);
+            new FetchMovieTask().execute(status);
             showData();
 
         }
 
         if(id == R.id.action_popular){
+            status = NetworkUtilities.POPULAR;
             mMovieAdapter.setMovieAdapterData(null);
-            new FetchMovieTask().execute(NetworkUtilities.POPULAR);
+            new FetchMovieTask().execute(status);
             showData();
 
         }
