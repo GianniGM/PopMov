@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 public class JsonDataParser {
 
-    public final static String TITLE = "title";
+//    public final static String TITLE = "title";
     public final static String ORIGINAL_TITLE = "original_title";
     public final static String POSTER = "poster_path";
     public final static String OVERVIEW = "overview";

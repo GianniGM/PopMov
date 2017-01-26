@@ -4,21 +4,16 @@
     android:id="@+id/activity_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.example.android.popularmovies.DetailActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
+
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_image_detail"
             android:layout_margin="8dp"
-            />
+            android:contentDescription="@string/poster" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -72,6 +67,5 @@
 
         </LinearLayout>
 
-    </LinearLayout>
 
 </LinearLayout>

@@ -4,5 +4,6 @@
     <string name="string_top_rated">Top rated</string>
     <string name="most_popular">Most Popular</string>
     <string name="users_ratings">rate:</string>
-    <string name="released">released on </string>
+    <string name="released">rel: </string>
+    <string name="poster">Movie Poster</string>
 </resources>
