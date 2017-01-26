@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,32 +25,28 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
-
-    private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
-
-    private TextView mErrorMessageTextView;
-
-    private ProgressBar mLoadingData;
     private String jsonResponse;
-
     private static String status = NetworkUtilities.POPULAR;
+
+    @BindView(R.id.recyclerview_posters) RecyclerView mRecyclerView;
+    @BindView(R.id.pb_loading_data) ProgressBar mLoadingData;
+    @BindView(R.id.tv_error_msg) TextView mErrorMessageTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this, this);
 
-        mRecyclerView =(RecyclerView) findViewById(R.id.recyclerview_posters);
-
-        mErrorMessageTextView = (TextView) findViewById(R.id.tv_error_msg);
-
-        mLoadingData = (ProgressBar) findViewById(R.id.pb_loading_data);
-
-        GridLayoutManager layoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.cols_number));
+        GridLayoutManager layoutManager = new GridLayoutManager(this, calculateColumns(this));
         mRecyclerView.setLayoutManager(layoutManager);
 
         mMovieAdapter = new MovieAdapter(this);
@@ -66,6 +63,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void showData(){
         mErrorMessageTextView.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    public static int calculateColumns(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int nColumns = (int) (dpWidth / 180);
+
+        Log.d("MAIN_ACTIVITY", String.valueOf(nColumns ));
+
+        return nColumns;
     }
 
     @Override

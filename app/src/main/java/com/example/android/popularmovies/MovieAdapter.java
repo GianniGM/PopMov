@@ -59,7 +59,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             Log.d(TAG, s);
         }
 
-        String posterURL = NetworkUtilities.imageURLBuilder(posterPath);
+        String posterURL = NetworkUtilities.imageURLBuilder(posterPath, NetworkUtilities.IMAGE_LARGE);
         Log.d(TAG, "LOADING IMAGE " + posterURL);
 
         Picasso.with(ctx).load(posterURL.toString()).into(holder.mPosterView);

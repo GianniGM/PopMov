@@ -13,24 +13,28 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
+
+    @BindView(R.id.tv_title_textview) TextView mTitleTextView;
+    @BindView(R.id.tv_overview) TextView mOverviewMovie;
+    @BindView(R.id.tv_user_ratings) TextView mUserRating;
+    @BindView(R.id.tv_release_date) TextView mReleaseDate;
+    @BindView(R.id.iv_image_detail) ImageView mImageViewPoster;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        TextView mTitleTextView = (TextView) findViewById(R.id.tv_title_textview);
-        TextView mOverviewMovie = (TextView) findViewById(R.id.tv_overview);
-        TextView mUserRating = (TextView) findViewById(R.id.tv_user_ratings);
-        TextView mReleaseDate = (TextView) findViewById(R.id.tv_release_date);
-
-        ImageView mImageViewPoster = (ImageView) findViewById(R.id.iv_image_detail);
+        ButterKnife.bind(this, this);
 
         Intent intentThatStartedThis = getIntent();
-
 
         if(intentThatStartedThis != null){
             if(intentThatStartedThis.hasExtra(Intent.EXTRA_TEXT)){
@@ -64,10 +68,11 @@ public class DetailActivity extends AppCompatActivity {
                 String url;
                 try {
                     String image = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.POSTER);
-                    url = NetworkUtilities.imageURLBuilder(image);
+                    url = NetworkUtilities.imageURLBuilder(image, NetworkUtilities.IMAGE_LARGE);
                     Log.d(TAG, "RECEIVED URL: " + url);
                     Picasso.with(this)
                             .load(url)
+                            .error(R.drawable.placeholder_error)
                             .into(mImageViewPoster);
 
                 } catch (JSONException e) {

@@ -3,6 +3,6 @@
     <string name="error_msg">An Error has occurred, check your Internet connection!</string>
     <string name="string_top_rated">Top rated</string>
     <string name="most_popular">Most Popular</string>
-    <string name="duration">Users Ratings:</string>
-    <string name="released">rel: </string>
+    <string name="users_ratings">rate:</string>
+    <string name="released">released on </string>
 </resources>

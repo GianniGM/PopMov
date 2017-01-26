@@ -19,6 +19,9 @@ public class NetworkUtilities {
 
     public final static String POPULAR = "popular";
     public final static String TOP_RATED = "top_rated";
+    public final static String IMAGE_SMALL = "w185/";
+    public final static String IMAGE_LARGE = "w500/";
+
 
     private final static String TAG = NetworkUtilities.class.getSimpleName();
     private final static String api_key = "INSERT YOU API KEY HERE";
@@ -50,11 +53,10 @@ public class NetworkUtilities {
         return url;
     }
 
-    public static String imageURLBuilder(String imagePath){
+    public static String imageURLBuilder(String imagePath, String imageSize){
         final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/";
-        final String IMAGE_SIZE = "w500/";
 
-        return IMAGE_BASE_URL + IMAGE_SIZE + imagePath;
+        return IMAGE_BASE_URL + imageSize + imagePath;
     }
 
     public static String getResponseFromHttp(URL url) throws IOException {
