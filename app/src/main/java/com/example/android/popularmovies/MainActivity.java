@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         } catch (JSONException e) {
             e.printStackTrace();
 
-            //// TODO: 20/01/17
             Toast.makeText(this, "Error on receiving data", Toast.LENGTH_SHORT).show();
             return;
         }
