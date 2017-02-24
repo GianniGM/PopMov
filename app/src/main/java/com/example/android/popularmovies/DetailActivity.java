@@ -62,8 +62,8 @@ public class DetailActivity extends AppCompatActivity {
 
                 mTitleTextView.setText(title);
                 mOverviewMovie.setText(overview);
-                mUserRating.append(" " + userRating);
-                mReleaseDate.append(" " + releaseDate);
+                mUserRating.setText(userRating);
+                mReleaseDate.setText(releaseDate);
 
                 String url;
                 try {
