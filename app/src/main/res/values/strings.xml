@@ -19,4 +19,5 @@
         dolore eu fugiat nulla pariatur.
     </string>
     <string name="favourite_button">mark as favourite</string>
+    <string name="button_favourite_label">Mark as Favourite</string>
 </resources>

@@ -91,18 +91,23 @@
                     tools:text="42"
                     android:textColor="@color/colorPrimaryDark" />
 
-                <Button
-                    android:id="@+id/button"
-                    android:contentDescription="@string/favourite_button"
-                    android:layout_gravity="end|top"
-                    android:background="@android:drawable/btn_star_big_on"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:onClick="clickedMarkAsFavourite" />
+            <Button
+                android:id="@+id/button"
+                android:contentDescription="@string/favourite_button"
+                android:layout_gravity="end|top"
+                android:background="@color/colorAccent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="@string/button_favourite_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="clickedMarkAsFavourite"
+                android:textColor="@android:color/background_light" />
 
                 <ScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     >
 
                     <TextView
