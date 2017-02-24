@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_detail"
     android:layout_width="match_parent"
@@ -24,22 +25,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="8dp"
-        >
+        android:weightSum="1">
 
         <ImageView
-            android:layout_width="wrap_content"
+            tools:layout_width="146dp"
+            tools:layout_height="165dp"
             android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:id="@+id/iv_image_detail"
             android:layout_margin="8dp"
-            android:contentDescription="@string/poster" />
+            android:contentDescription="@string/poster"
+            app:srcCompat="@drawable/placeholder_error" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="8dp"
             >
+
+            <TextView
+                android:text="@string/released"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/release_date_label" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,22 +57,30 @@
                 android:id="@+id/tv_release_date"
                 android:text="@string/released"
                 android:layout_marginBottom="8dp"
-                tools:text="27 february 2017" />
+                tools:text="27 february 2017"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <TextView
+                android:text="@string/users_ratings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rate_label" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/users_ratings"
                 android:textSize="20sp"
                 android:id="@+id/tv_user_ratings"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                tools:text="42"
+                android:textColor="@color/colorPrimaryDark" />
 
 
         </LinearLayout>
 
     </LinearLayout>
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
         <TextView
@@ -72,7 +89,7 @@
             android:id="@+id/tv_overview"
             android:textSize="21sp"
             android:padding="8dp"
-       />
+            tools:text="@string/lorem_ipsum" />
     </ScrollView>
 
 

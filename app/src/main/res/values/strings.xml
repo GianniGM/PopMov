@@ -4,6 +4,18 @@
     <string name="string_top_rated">Top rated</string>
     <string name="most_popular">Most Popular</string>
     <string name="users_ratings">rate:</string>
-    <string name="released">rel: </string>
+    <string name="released">released on: </string>
     <string name="poster">Movie Poster</string>
+
+
+
+
+    <string name="lorem_ipsum"> Lorem ipsum dolor sit amet,
+        consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+        dolore eu fugiat nulla pariatur.
+    </string>
 </resources>
