@@ -1,71 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:context="com.example.android.popularmovies.DetailActivity">
 
+    <ScrollView
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/background_light"
+        android:layout_width="200dp">
 
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_width="match_parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/iv_image_detail"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/poster" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_title_textview"
+                tools:text="a very very very long title"
+                android:gravity="center"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:textSize="24sp"
+                android:padding="8dp"
+                android:textColor="@android:color/background_light" />
+
+            <ImageView
+                tools:layout_width="146dp"
+                tools:layout_height="165dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/iv_image_detail"
+                android:contentDescription="@string/poster"
+                app:srcCompat="@drawable/placeholder_error"
+                android:padding="8dp"
+                android:layout_gravity="center_horizontal|center_vertical" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="8dp"
             >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_title_textview"
-                style="@style/Base.TextAppearance.AppCompat.Title"
-                android:layout_gravity="center_horizontal"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                android:layout_margin="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:id="@+id/tv_release_date"
-                android:text="@string/released"
-                android:layout_gravity="center_horizontal"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/users_ratings"
-                android:textSize="20sp"
-                android:id="@+id/tv_user_ratings"
-                android:layout_gravity="center_horizontal"
-                />
-
-
-            <ScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
+                <TextView
+                    android:text="@string/released"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/release_date_label" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:id="@+id/tv_release_date"
+                    android:text="@string/released"
+                    android:layout_marginBottom="8dp"
+                    tools:text="27 february 2017"
+                    android:textColor="@color/colorPrimaryDark" />
+
+
+            <TextView
+                android:text="@string/users_ratings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rate_label" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:id="@+id/tv_user_ratings"
+                    android:layout_marginBottom="8dp"
+                    tools:text="42"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:contentDescription="@string/favourite_button"
+                    android:layout_gravity="end|top"
+                    android:background="@android:drawable/btn_star_big_on"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:onClick="clickedMarkAsFavourite" />
+
+                <ScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_overview"
                     android:textSize="21sp"
-                    android:padding="8dp"
-                    />
+                    tools:text="@string/lorem_ipsum" />
 
-            </ScrollView>
 
+
+                </ScrollView>
+
+            </LinearLayout>
         </LinearLayout>
+ </LinearLayout>
 
-
-</LinearLayout>
