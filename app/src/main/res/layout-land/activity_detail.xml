@@ -45,83 +45,27 @@
     </ScrollView>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:orientation="vertical">
 
+        <include layout="@layout/movie_details" />
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
+            android:layout_marginTop="8dp"
             >
 
-                <TextView
-                    android:text="@string/released"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/release_date_label" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:id="@+id/tv_release_date"
-                    android:text="@string/released"
-                    android:layout_marginBottom="8dp"
-                    tools:text="27 february 2017"
-                    android:textColor="@color/colorPrimaryDark" />
-
-
             <TextView
-                android:text="@string/users_ratings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/rate_label" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_overview"
+            android:textSize="21sp"
+            tools:text="@string/lorem_ipsum" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:id="@+id/tv_user_ratings"
-                    android:layout_marginBottom="8dp"
-                    tools:text="42"
-                    android:textColor="@color/colorPrimaryDark" />
-
-            <Button
-                android:id="@+id/button"
-                android:contentDescription="@string/favourite_button"
-                android:layout_gravity="end|top"
-                android:background="@color/colorAccent"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="@string/button_favourite_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="clickedMarkAsFavourite"
-                android:textColor="@android:color/background_light" />
-
-                <ScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    >
-
-                    <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_overview"
-                    android:textSize="21sp"
-                    tools:text="@string/lorem_ipsum" />
-
-
-
-                </ScrollView>
-
-            </LinearLayout>
-        </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
  </LinearLayout>
 

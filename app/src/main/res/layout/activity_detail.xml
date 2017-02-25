@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_detail"
     android:layout_width="match_parent"
@@ -21,79 +20,8 @@
         android:textColor="@android:color/background_light"
         android:textSize="36sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
+   <include layout="@layout/movie_details" />
 
-        <ImageView
-            tools:layout_width="146dp"
-            tools:layout_height="165dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/iv_image_detail"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/poster"
-            app:srcCompat="@drawable/placeholder_error" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            >
-
-            <TextView
-                android:text="@string/released"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/release_date_label" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:id="@+id/tv_release_date"
-                android:text="@string/released"
-                android:layout_marginBottom="8dp"
-                tools:text="27 february 2017"
-                android:textColor="@color/colorPrimaryDark" />
-
-            <TextView
-                android:text="@string/users_ratings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/rate_label" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:id="@+id/tv_user_ratings"
-                android:layout_marginBottom="8dp"
-                tools:text="42"
-                android:textColor="@color/colorPrimaryDark" />
-
-
-            <Button
-                android:id="@+id/button"
-                android:contentDescription="@string/favourite_button"
-                android:layout_gravity="center"
-                android:background="@color/colorAccent"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="@string/button_favourite_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="clickedMarkAsFavourite"
-                android:textColor="@android:color/background_light"
-                />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
