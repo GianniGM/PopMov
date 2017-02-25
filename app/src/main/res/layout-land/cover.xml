@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-</LinearLayout>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorAccent"
+    android:textColor="@android:color/background_light"
+    android:layout_width="200dp">
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_width="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_title_textview"
+                tools:text="a very very very long title"
+                android:gravity="center"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:textSize="24sp"
+                android:padding="8dp"
+                android:textColor="@android:color/background_light" />
+
+            <ImageView
+                tools:layout_width="146dp"
+                tools:layout_height="165dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/iv_image_detail"
+                android:contentDescription="@string/poster"
+                app:srcCompat="@drawable/placeholder_error"
+                android:padding="8dp"
+                android:layout_gravity="center_horizontal|center_vertical" />
+
+        </LinearLayout>
+    </ScrollView>
