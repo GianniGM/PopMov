@@ -29,14 +29,15 @@
 
 
         <LinearLayout
-            android:gravity="top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:orientation="vertical">
 
 
             <include
                 layout="@layout/movie_details"
+                android:focusable="false"
                 android:id="@+id/movie_details"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
@@ -44,6 +45,7 @@
 
 
             <include layout="@layout/trailers_list"
+                android:focusable="false"
                 android:id="@+id/trailers_list"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"/>
