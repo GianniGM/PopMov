@@ -28,6 +28,7 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.iv_image_detail) ImageView mImageViewPoster;
 
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
