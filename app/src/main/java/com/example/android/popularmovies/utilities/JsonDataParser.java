@@ -11,6 +11,8 @@ import org.json.JSONObject;
 
 public class JsonDataParser {
 
+//    TODO INSERIRE ID FILM
+
 //    public final static String TITLE = "title";
     public final static String ORIGINAL_TITLE = "original_title";
     public final static String POSTER = "poster_path";
