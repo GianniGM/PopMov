@@ -14,7 +14,7 @@ public class MoviesContract {
 
     public static final Uri BASE_CONTENT_URI =Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    public static final String MOVIES = "movies";
+    public static final String PATH_MOVIES = "movies";
 
     //base columns class
     public static final class MovieEntry implements BaseColumns {
@@ -23,7 +23,7 @@ public class MoviesContract {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI
                 .buildUpon()
-                .appendPath(MOVIES)
+                .appendPath(PATH_MOVIES)
                 .build();
 
         public static final String ORIGINAL_TITLE = "original_title";

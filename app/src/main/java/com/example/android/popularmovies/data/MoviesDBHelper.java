@@ -38,8 +38,8 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
 
                 //integers values 0 if false,
                 // > 0 if true
-                MovieEntry.IS_TOP_RATED         + " INTEGER NOT NULL, " +
-                MovieEntry.IS_MOST_POPULAR      + " INTEGER NOT NULL, " +
+                MovieEntry.IS_TOP_RATED         + " INTEGER DEFAULT 0, " +
+                MovieEntry.IS_MOST_POPULAR      + " INTEGER DEFAULT 0, " +
                 ");" ;
 
         db.execSQL(SQL_CREATE_TABLE_STRING);
@@ -51,7 +51,7 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + MovieEntry.NAME_TABLE);
         onCreate(db);
     }
-    
+
     public static boolean isTopRated(int value){
         if (value > 0) return true;
         else return false;
