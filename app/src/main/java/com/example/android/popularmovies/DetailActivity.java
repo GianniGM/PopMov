@@ -46,7 +46,9 @@ public class DetailActivity extends AppCompatActivity {
                 String overview;
                 String releaseDate;
                 String userRating;
+                String movieId;
                 try {
+                    movieId = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.MOVIE_ID);
                     title = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.ORIGINAL_TITLE);
                     overview = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.OVERVIEW);
                     releaseDate = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.RELEASE_DATE);
@@ -83,9 +85,15 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
 
+        //1. controllare che non sia tra i favoriti
+        //2. se è tra i favoriti cambiare il testo del pulsante
+        //3. altrimenti lasciare così com'è
     }
 
     public void clickedMarkAsFavourite(View view) {
         //TODO do stuff here
+        //1. se è tra i favoriti settare a zero nel database
+        //2. altrimenti settare a uno
+        //3. aggiornare il database
     }
 }

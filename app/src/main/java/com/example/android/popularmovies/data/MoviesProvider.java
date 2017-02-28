@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import com.example.android.popularmovies.R;
+
 import static com.example.android.popularmovies.data.MoviesContract.*;
 
 /**
@@ -19,6 +21,7 @@ public class MoviesProvider extends ContentProvider {
     //TODO DON'T REMBER IN THE INSERT THE VALUES TRUE/FALSE AND THE APPROPRIATE QUERIES
     public static final int CODE_TOP_RATED = 100;
     public static final int CODE_MOST_POPULAR = 101;
+    public static final int CODE_FAVOURITE = 102;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final int IS_TRUE = 1;
@@ -33,6 +36,7 @@ public class MoviesProvider extends ContentProvider {
 
         uriMatcher.addURI(authority, path + "/#", CODE_TOP_RATED);
         uriMatcher.addURI(authority, path + "/#", CODE_MOST_POPULAR);
+        uriMatcher.addURI(authority, path + "/#", CODE_FAVOURITE);
 
         return uriMatcher;
     }
@@ -70,6 +74,7 @@ public class MoviesProvider extends ContentProvider {
 
         return inserted;
     }
+
 
     @Override
     public boolean onCreate() {
@@ -150,15 +155,59 @@ public class MoviesProvider extends ContentProvider {
             }
             break;
 
+            case CODE_FAVOURITE: {
+                cursor = mDBHelper.getReadableDatabase().query(
+                        MovieEntry.NAME_TABLE,
+                        projection,
+                        MovieEntry.IS_FAVOURITE + " >= ? ",
+                        selectionArguments,
+                        null,
+                        null,
+                        sortOrder
+                );
+
+            }
+            break;
+
             default:
-//               TODO RIVEDERE QUESTA PARTE, FORSE È HARDCODED
-               throw new UnsupportedOperationException("Unknow uri: " + uri);
+                //TODO hardcoded here, must to fix this
+                throw new UnsupportedOperationException(getContext().getString(
+                        R.string.error_invalid_uri,
+                        uri
+                ));
         }
 
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return cursor;
     }
+
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        int numRowsDeleted;
+
+        int match = sUriMatcher.match(uri);
+
+        if(match == CODE_MOST_POPULAR || match == CODE_TOP_RATED || match == CODE_FAVOURITE) {
+            numRowsDeleted = mDBHelper.getWritableDatabase().delete(
+                    MovieEntry.NAME_TABLE,
+                    selection,
+                    selectionArgs
+            );
+        }else{
+            //TODO hardcoded here, must to fix this
+            throw new UnsupportedOperationException(getContext().getString(
+                    R.string.error_invalid_uri,
+                    uri
+            ));
+        }
+
+        if(numRowsDeleted != 0)
+            getContext().getContentResolver().notifyChange(uri, null);
+
+        return numRowsDeleted;
+    }
+
 
     @Nullable
     @Override
@@ -172,23 +221,38 @@ public class MoviesProvider extends ContentProvider {
         return null;
     }
 
-    @Nullable
-    public Uri setFlagAndInsert(Uri uri, ContentValues values) {
-        return null;
-    }
-
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
-    }
-
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        int numRowsUpdated;
+
+        switch (sUriMatcher.match(uri)){
+            case CODE_FAVOURITE:
+                numRowsUpdated = mDBHelper.getWritableDatabase().update(
+                        MovieEntry.NAME_TABLE,
+                        values,
+                        "_id=" + MovieEntry._ID,
+                        null
+                );
+
+                break;
+
+            default:
+                //TODO hardcoded here, must to fix this
+                throw new UnsupportedOperationException(getContext().getString(
+                        R.string.error_invalid_uri,
+                        uri
+                ));
+        }
+
+        if(numRowsUpdated != 0)
+            getContext().getContentResolver().notifyChange(uri, null);
+
+        return numRowsUpdated;
     }
 
     @Override
     public void shutdown() {
+        mDBHelper.close();
         super.shutdown();
     }
 }

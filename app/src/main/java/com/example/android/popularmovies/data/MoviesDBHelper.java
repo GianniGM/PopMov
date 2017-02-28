@@ -30,6 +30,7 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
 
                 " (" +
                 MovieEntry._ID                  + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                MovieEntry.MOVIE_ID             + " STRING PRIMARY KEY" +
                 MovieEntry.ORIGINAL_TITLE       + " TEXT NOT NULL, " +
                 MovieEntry.POSTER               + " TEXT NOT NULL, " +
                 MovieEntry.OVERVIEW             + " TEXT NOT NULL, " +
@@ -40,6 +41,7 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
                 // > 0 if true
                 MovieEntry.IS_TOP_RATED         + " INTEGER DEFAULT 0, " +
                 MovieEntry.IS_MOST_POPULAR      + " INTEGER DEFAULT 0, " +
+                MovieEntry.IS_FAVOURITE         + " INTEGER DEFAULT 0, " +
                 ");" ;
 
         db.execSQL(SQL_CREATE_TABLE_STRING);
@@ -47,17 +49,11 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //TODO DESTROY AND RECREATE THE DB DROP IF EXISTS
         db.execSQL("DROP TABLE IF EXISTS " + MovieEntry.NAME_TABLE);
         onCreate(db);
     }
 
-    public static boolean isTopRated(int value){
-        if (value > 0) return true;
-        else return false;
-    }
-
-    public static boolean isMostPopular(int value){
+    public static boolean valueIsTrue(int value){
         if (value > 0) return true;
         else return false;
     }
