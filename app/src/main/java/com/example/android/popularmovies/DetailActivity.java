@@ -86,6 +86,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void clickedMarkAsFavourite(View view) {
-        //do stuf here
+        //TODO do stuff here
     }
 }
