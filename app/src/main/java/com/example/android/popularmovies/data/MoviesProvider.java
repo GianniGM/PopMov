@@ -135,6 +135,7 @@ public class MoviesProvider extends ContentProvider {
         //TODO CAPIRE QUESTA COSA DELLE QUERY
         Log.d("MoviesProvider", uri.toString());
 
+//        TODO SISTEMARE QUI C'È QUALCOSA CHE NON VA: MATCHER E NEMMENO VALORI
         switch (sUriMatcher.match(uri)){
             case CODE_TOP_RATED: {
                 cursor = mDBHelper.getReadableDatabase().query(
@@ -175,7 +176,7 @@ public class MoviesProvider extends ContentProvider {
                         null,
                         sortOrder
                 );
-
+                //TODO SOLO QUI FUNZIONA NON NEGLI ALTRI MATCH
                 Log.e("FFFFFFFF", String.valueOf(cursor.getCount()));
 
             }
