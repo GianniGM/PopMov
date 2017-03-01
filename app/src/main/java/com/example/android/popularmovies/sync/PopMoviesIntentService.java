@@ -19,6 +19,6 @@ public class PopMoviesIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        PopularMoviesSyncTask.syncMovies(this);
+        MovieSyncTask.startSynchronizing(this);
     }
 }
