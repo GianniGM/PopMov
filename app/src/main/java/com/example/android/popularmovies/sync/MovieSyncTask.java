@@ -1,8 +1,10 @@
 package com.example.android.popularmovies.sync;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
+import com.example.android.popularmovies.data.MoviesContract;
 import com.example.android.popularmovies.data.MoviesDBUtility;
 import com.example.android.popularmovies.utilities.Movies;
 import com.example.android.popularmovies.utilities.MoviesInterface;
@@ -83,14 +85,25 @@ public class MovieSyncTask implements Callback<Movies>{
 
         switch (TYPE){
             case NetworkUtilities.POPULAR:
-                int inserted = MoviesDBUtility.addMostPopularInDB(response.body(), context);
-                Log.e(TAG, "inserted: " + inserted);
+
+                Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
+                        .appendPath(MoviesContract.MovieEntry.IS_MOST_POPULAR)
+                        .build();
+
+                int inserted = MoviesDBUtility.addInDB(uri, response.body(), context);
+                Log.e(TAG, "most popular inserted: " + inserted);
                 TYPE = NetworkUtilities.TOP_RATED;
                 loadMovieData(NetworkUtilities.TOP_RATED);
                 break;
 
             case NetworkUtilities.TOP_RATED:
-                MoviesDBUtility.addTopRatedInDB(response.body(), context);
+
+                uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
+                        .appendPath(MoviesContract.MovieEntry.IS_TOP_RATED)
+                        .build();
+
+                inserted =MoviesDBUtility.addInDB(uri, response.body(), context);
+                Log.e(TAG, "top rated inserted: " + inserted);
                 TYPE = NetworkUtilities.POPULAR;
                 break;
 

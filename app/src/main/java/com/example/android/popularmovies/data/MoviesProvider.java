@@ -21,9 +21,8 @@ import static com.example.android.popularmovies.data.MoviesContract.*;
 
 public class MoviesProvider extends ContentProvider {
     //TODO DON'T REMBER IN THE INSERT THE VALUES TRUE/FALSE AND THE APPROPRIATE QUERIES
-    public static final int CODE_TOP_RATED = 100;
-    public static final int CODE_MOST_POPULAR = 101;
-    public static final int CODE_FAVOURITE = 102;
+    public static final int CODE_BEST = 100;
+    public static final int CODE_FAVOURITE = 101;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final int IS_TRUE = 1;
@@ -36,9 +35,8 @@ public class MoviesProvider extends ContentProvider {
         final String authority = CONTENT_AUTHORITY;
         final String path = PATH_MOVIES;
 
-        uriMatcher.addURI(authority, path ,CODE_TOP_RATED);
-        uriMatcher.addURI(authority, path + "/#", CODE_MOST_POPULAR);
-        uriMatcher.addURI(authority, path + "/#", CODE_FAVOURITE);
+        uriMatcher.addURI(authority, path, CODE_FAVOURITE);
+        uriMatcher.addURI(authority, path + "/*", CODE_BEST);
 
         return uriMatcher;
     }
@@ -56,6 +54,7 @@ public class MoviesProvider extends ContentProvider {
 
         int inserted = 0;
 
+        db.beginTransaction();
         try {
             for (ContentValues v :  values) {
                 //TODO NOT NORMALIzED
@@ -90,11 +89,12 @@ public class MoviesProvider extends ContentProvider {
 
         switch (sUriMatcher.match(uri)) {
 
-            case CODE_MOST_POPULAR: {
+            case CODE_BEST: {
                 //bulk insertions are safe
                 db.beginTransaction();
 
-                int insertedRow = setFlagAndInsert(db, values, MovieEntry.IS_MOST_POPULAR);
+                String valueEntry = uri.getLastPathSegment();
+                int insertedRow = setFlagAndInsert(db, values, valueEntry);
 
                 if (insertedRow > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
@@ -103,19 +103,7 @@ public class MoviesProvider extends ContentProvider {
                 return insertedRow;
             }
 
-            case CODE_TOP_RATED: {
-                //bulk insertions are safe
-                db.beginTransaction();
-
-                int insertedRow = setFlagAndInsert(db, values, MovieEntry.IS_TOP_RATED);
-
-                if (insertedRow > 0) {
-                    getContext().getContentResolver().notifyChange(uri, null);
-                }
-
-                return insertedRow;
-            }
-
+            //TODO FARE CASE FAVOURITE
 
             default:
                return super.bulkInsert(uri, values);
@@ -130,38 +118,28 @@ public class MoviesProvider extends ContentProvider {
 
 //        String[] selectionArguments = new String[]{uri.getLastPathSegment()};
 
-        String[] selectionArguments = new String[]{"1"};
+        String[] selectionArguments = new String[]{"0"};
 
         //TODO CAPIRE QUESTA COSA DELLE QUERY
         Log.d("MoviesProvider", uri.toString());
 
 //        TODO SISTEMARE QUI C'È QUALCOSA CHE NON VA: MATCHER E NEMMENO VALORI
         switch (sUriMatcher.match(uri)){
-            case CODE_TOP_RATED: {
+
+            case CODE_BEST: {
+                String valueEntry = uri.getLastPathSegment();
+
                 cursor = mDBHelper.getReadableDatabase().query(
                         MovieEntry.NAME_TABLE,
                         projection,
-                        MovieEntry.IS_TOP_RATED + " >= ? ",
+                        valueEntry + " >= ? ",
                         selectionArguments,
                         null,
                         null,
                         sortOrder
                 );
 
-            }
-            break;
-
-            case CODE_MOST_POPULAR: {
-                cursor = mDBHelper.getReadableDatabase().query(
-                        MovieEntry.NAME_TABLE,
-                        projection,
-                        MovieEntry.IS_MOST_POPULAR + " >= ? ",
-                        selectionArguments,
-                        null,
-                        null,
-                        sortOrder
-                );
-
+                Log.e("FFFFFFFF", uri + " " + valueEntry+ " " +String.valueOf(cursor.getCount()));
 
             }
             break;
@@ -203,7 +181,7 @@ public class MoviesProvider extends ContentProvider {
 
         int match = sUriMatcher.match(uri);
 
-        if(match == CODE_MOST_POPULAR || match == CODE_TOP_RATED || match == CODE_FAVOURITE) {
+        if(match == CODE_BEST || match == CODE_FAVOURITE) {
             numRowsDeleted = mDBHelper.getWritableDatabase().delete(
                     MovieEntry.NAME_TABLE,
                     selection,

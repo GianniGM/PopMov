@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final int ID_MOVIE_LOADER = 8522;
     private MovieAdapter mMovieAdapter;
     private String jsonResponse;
-    private static String status = NetworkUtilities.POPULAR;
+    private static String status = MoviesContract.MovieEntry.IS_MOST_POPULAR;
 
     private int mPosition = RecyclerView.NO_POSITION;
 
@@ -127,13 +127,13 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if(id == R.id.action_top_rated){
-            status = NetworkUtilities.TOP_RATED;
+            status = MoviesContract.MovieEntry.IS_TOP_RATED;
             getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
             showData();
         }
 
         if(id == R.id.action_popular){
-            status = NetworkUtilities.POPULAR;
+            status = MoviesContract.MovieEntry.IS_MOST_POPULAR;
             getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
             showData();
         }
@@ -144,26 +144,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        int statusCode;
-
-        switch (status){
-            case NetworkUtilities.POPULAR:
-                statusCode = MoviesProvider.CODE_MOST_POPULAR;
-                break;
-
-            case NetworkUtilities.TOP_RATED:
-                statusCode= MoviesProvider.CODE_TOP_RATED;
-                break;
-
-            default:
-                throw new UnsupportedOperationException("wrong value");
-        }
-
-
         switch (id){
             case ID_MOVIE_LOADER:
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
-                        .appendPath(String.valueOf(statusCode))
+                        .appendPath(status)
                         .build();
 
                 String[] projection = new String[]{

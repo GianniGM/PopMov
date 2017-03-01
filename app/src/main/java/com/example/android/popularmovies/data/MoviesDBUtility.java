@@ -3,6 +3,7 @@ package com.example.android.popularmovies.data;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.android.popularmovies.utilities.Movie;
@@ -39,7 +40,7 @@ public class MoviesDBUtility {
     private static final int IS_TRUE = 1;
     private static final int IS_FALSE = 0;
 
-    private static int addInDB(Movies body, Context ctx, String type){
+    public static int addInDB(Uri uri, Movies body, Context ctx){
         Movie[] moviesArray = body.getMovies();
 
         int n = moviesArray.length;
@@ -60,7 +61,7 @@ public class MoviesDBUtility {
 // TODO            Log.e("POSTERPATH:", posterPath );
             c.put(MovieEntry.POSTER, posterPath);
 
-            c.put(type, IS_TRUE);
+//            c.put(type, IS_TRUE);
 
             contentValuesArray[i] = c;
 
@@ -70,23 +71,26 @@ public class MoviesDBUtility {
             ContentResolver contentResolver = ctx.getContentResolver();
 
 //            TODO
-            contentResolver.delete(
-                    MovieEntry.CONTENT_URI,
-                    null,
-                    null
-            );
+//            contentResolver.delete(
+//                    MovieEntry.CONTENT_URI,
+//                    null,
+//                    null
+//            );
 
-            inserted = contentResolver.bulkInsert(MovieEntry.CONTENT_URI, contentValuesArray);
+
+//            inserted = contentResolver.bulkInsert(MovieEntry.CONTENT_URI, contentValuesArray);
+            inserted = contentResolver.bulkInsert(uri, contentValuesArray);
+
         }
 
         return inserted;
     }
 
-    public static int addTopRatedInDB(Movies body, Context ctx) {
-        return addInDB(body,ctx,MovieEntry.IS_TOP_RATED);
-    }
-
-    public static int addMostPopularInDB(Movies body, Context ctx) {
-        return addInDB(body,ctx,MovieEntry.IS_MOST_POPULAR);
-    }
+//    public static int addTopRatedInDB(Movies body, Context ctx) {
+//        return addInDB(body,ctx,MovieEntry.IS_TOP_RATED);
+//    }
+//
+//    public static int addMostPopularInDB(Movies body, Context ctx) {
+//        return addInDB(body,ctx,MovieEntry.IS_MOST_POPULAR);
+//    }
 }
