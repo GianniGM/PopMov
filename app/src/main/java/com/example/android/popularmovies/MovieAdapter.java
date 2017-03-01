@@ -1,6 +1,7 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.android.popularmovies.data.MoviesContract;
+import com.example.android.popularmovies.data.MoviesDBUtility;
 import com.example.android.popularmovies.utilities.NetworkUtilities;
 import com.squareup.picasso.Picasso;
 
@@ -20,18 +23,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     private final static String TAG = MovieAdapter.class.getSimpleName();
 
-    private String[] mPostersData;
-
     private final MovieAdapterOnClickHandler mClickHandler;
 
     private Context ctx;
+    private Cursor mCursor;
 
     public MovieAdapter(MovieAdapterOnClickHandler clickHandler){
         mClickHandler = clickHandler;
     }
 
-    public void setMovieAdapterData(String[] postersData){
-        mPostersData = postersData;
+    public void swapCursor(Cursor data) {
+        mCursor = data;
+        notifyDataSetChanged();
     }
 
     public interface MovieAdapterOnClickHandler {
@@ -53,22 +56,25 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
-        String posterPath = mPostersData[position];
+        mCursor.moveToPosition(position);
 
-        for(String s : mPostersData){
-            Log.d(TAG, s);
-        }
+        //TODO index poster
+        String posterURL=mCursor.getString(0);
 
-        String posterURL = NetworkUtilities.imageURLBuilder(posterPath, NetworkUtilities.IMAGE_LARGE);
-        Log.d(TAG, "LOADING IMAGE " + posterURL);
+
+        //TODO DEBUG
+//        for(int i = 0; i < 4; i ++) {
+//            String s = mCursor.getString(i);
+//            Log.d(TAG, "LOADED DATA " + s);
+//        }
 
         Picasso.with(ctx).load(posterURL).into(holder.mPosterView);
     }
 
     @Override
     public int getItemCount() {
-        if(mPostersData == null) return 0;
-        return mPostersData.length;
+        if (null == mCursor) return 0;
+        return mCursor.getCount();
     }
 
     class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

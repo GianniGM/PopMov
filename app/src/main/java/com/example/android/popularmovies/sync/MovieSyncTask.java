@@ -28,6 +28,7 @@ public class MovieSyncTask implements Callback<Movies>{
     private static String TYPE = NetworkUtilities.POPULAR;
 
     synchronized public static MovieSyncTask startSynchronizing(Context ctx){
+
         MovieSyncTask m = new MovieSyncTask();
         m.Start(ctx);
         return m;
@@ -38,6 +39,8 @@ public class MovieSyncTask implements Callback<Movies>{
     }
 
     private void Start(Context ctx){
+
+        Log.d(TAG, "Service Started");
         instance = buildMovieInstance();
         loadMovieData(TYPE);
         context = ctx;
@@ -66,10 +69,22 @@ public class MovieSyncTask implements Callback<Movies>{
         retrofitCall = call;
 
         Log.e(TAG, "looking for data: " + TYPE);
+        if(!response.isSuccessful()){
+            Log.d(TAG, "Unable to connect");
+            return;
+        }
+
+
+        //TODO REMOVE ALL FOR
+//        for(int i = 0; i < 4; i ++){
+//            String r = response.body().getMovies()[i].getOverview().toString();
+//            Log.e(TAG, r);
+//        }
 
         switch (TYPE){
             case NetworkUtilities.POPULAR:
-                MoviesDBUtility.addMostPopularInDB(response.body(), context);
+                int inserted = MoviesDBUtility.addMostPopularInDB(response.body(), context);
+                Log.e(TAG, "inserted: " + inserted);
                 TYPE = NetworkUtilities.TOP_RATED;
                 loadMovieData(NetworkUtilities.TOP_RATED);
                 break;

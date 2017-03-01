@@ -6,7 +6,9 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.android.popularmovies.R;
 
@@ -34,7 +36,7 @@ public class MoviesProvider extends ContentProvider {
         final String authority = CONTENT_AUTHORITY;
         final String path = PATH_MOVIES;
 
-        uriMatcher.addURI(authority, path + "/#", CODE_TOP_RATED);
+        uriMatcher.addURI(authority, path ,CODE_TOP_RATED);
         uriMatcher.addURI(authority, path + "/#", CODE_MOST_POPULAR);
         uriMatcher.addURI(authority, path + "/#", CODE_FAVOURITE);
 
@@ -83,7 +85,7 @@ public class MoviesProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         final SQLiteDatabase db = mDBHelper.getWritableDatabase();
 
         switch (sUriMatcher.match(uri)) {
@@ -123,10 +125,15 @@ public class MoviesProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor cursor;
 
-        String[] selectionArguments = new String[]{uri.getLastPathSegment()};
+//        String[] selectionArguments = new String[]{uri.getLastPathSegment()};
+
+        String[] selectionArguments = new String[]{"1"};
+
+        //TODO CAPIRE QUESTA COSA DELLE QUERY
+        Log.d("MoviesProvider", uri.toString());
 
         switch (sUriMatcher.match(uri)){
             case CODE_TOP_RATED: {
@@ -139,6 +146,7 @@ public class MoviesProvider extends ContentProvider {
                         null,
                         sortOrder
                 );
+
             }
             break;
 
@@ -152,6 +160,8 @@ public class MoviesProvider extends ContentProvider {
                         null,
                         sortOrder
                 );
+
+
             }
             break;
 
@@ -159,18 +169,22 @@ public class MoviesProvider extends ContentProvider {
                 cursor = mDBHelper.getReadableDatabase().query(
                         MovieEntry.NAME_TABLE,
                         projection,
-                        MovieEntry.IS_FAVOURITE + " >= ? ",
-                        selectionArguments,
+                        null,
+                        null,
                         null,
                         null,
                         sortOrder
                 );
+
+                Log.e("FFFFFFFF", String.valueOf(cursor.getCount()));
 
             }
             break;
 
             default:
                 //TODO hardcoded here, must to fix this
+                Log.e("FFFFFFFF", "ECCEZIONE DEL CAZZO");
+
                 throw new UnsupportedOperationException(getContext().getString(
                         R.string.error_invalid_uri,
                         uri
@@ -183,7 +197,7 @@ public class MoviesProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         int numRowsDeleted;
 
         int match = sUriMatcher.match(uri);
@@ -211,18 +225,18 @@ public class MoviesProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         return null;
     }
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         return null;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int numRowsUpdated;
 
         switch (sUriMatcher.match(uri)){

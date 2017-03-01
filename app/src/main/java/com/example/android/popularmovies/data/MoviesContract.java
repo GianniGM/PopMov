@@ -31,12 +31,12 @@ public class MoviesContract {
         public static final String OVERVIEW = "overview";
         public static final String RELEASE_DATE = "release_date";
         public static final String VOTE_AVERAGE = "vote_average";
-        public static final String MOVIE_ID = "movie-id";
+        public static final String MOVIE_ID = "movie_id";
 
         //these two values can have only values true/false
-        public static final String IS_TOP_RATED ="top-rated";
-        public static final String IS_MOST_POPULAR = "most-popular";
-        public static final String IS_FAVOURITE = "favourite-from-user";
+        public static final String IS_TOP_RATED ="top_rated";
+        public static final String IS_MOST_POPULAR = "most_popular";
+        public static final String IS_FAVOURITE = "favourite_from_user";
 
         public static Uri buildMoviesWithDate(long date){
             return CONTENT_URI.buildUpon()

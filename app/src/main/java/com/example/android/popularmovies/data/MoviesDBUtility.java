@@ -3,6 +3,7 @@ package com.example.android.popularmovies.data;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.android.popularmovies.utilities.Movie;
 import com.example.android.popularmovies.utilities.Movies;
@@ -14,7 +15,27 @@ import com.example.android.popularmovies.utilities.NetworkUtilities;
  * utility function for adding values to database
  */
 
+
+
+
 public class MoviesDBUtility {
+
+    public static final String[] MOVIE_PROJECTION = {
+            MovieEntry.MOVIE_ID,
+            MovieEntry.RELEASE_DATE,
+            MovieEntry.ORIGINAL_TITLE,
+            MovieEntry.VOTE_AVERAGE,
+            MovieEntry.OVERVIEW,
+            MovieEntry.POSTER,
+    };
+
+    public static final int INDEX_MOVIE_ID = 0;
+    public static final int INDEX_RELEASE_DATE = 1;
+    public static final int INDEX_ORIGINAL_TITLE = 2;
+    public static final int INDEX_VOTE_AVERAGE = 3;
+    public static final int INDEX_OVERVIEW = 4;
+    public static final int INDEX_POSTER = 5;
+
     private static final int IS_TRUE = 1;
     private static final int IS_FALSE = 0;
 
@@ -36,6 +57,7 @@ public class MoviesDBUtility {
             c.put(MovieEntry.VOTE_AVERAGE, m.getVoteAverage());
 
             String posterPath = NetworkUtilities.imageURLBuilder(m.getPosterPath(), NetworkUtilities.IMAGE_LARGE);
+// TODO            Log.e("POSTERPATH:", posterPath );
             c.put(MovieEntry.POSTER, posterPath);
 
             c.put(type, IS_TRUE);
@@ -44,10 +66,17 @@ public class MoviesDBUtility {
 
         }
 
-
         if (contentValuesArray.length != 0){
             ContentResolver contentResolver = ctx.getContentResolver();
-            contentResolver.bulkInsert(MovieEntry.CONTENT_URI, contentValuesArray);
+
+//            TODO
+            contentResolver.delete(
+                    MovieEntry.CONTENT_URI,
+                    null,
+                    null
+            );
+
+            inserted = contentResolver.bulkInsert(MovieEntry.CONTENT_URI, contentValuesArray);
         }
 
         return inserted;

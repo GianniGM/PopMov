@@ -3,8 +3,10 @@ package com.example.android.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.popularmovies.data.MoviesContract;
+import com.example.android.popularmovies.data.MoviesProvider;
+import com.example.android.popularmovies.sync.MovieSyncTask;
+import com.example.android.popularmovies.sync.PopMoviesIntentService;
 import com.example.android.popularmovies.utilities.JsonDataParser;
 import com.example.android.popularmovies.utilities.NetworkUtilities;
 
@@ -35,9 +41,12 @@ public class MainActivity extends AppCompatActivity implements
         MovieAdapter.MovieAdapterOnClickHandler,
         LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final int ID_MOVIE_LOADER = 8522;
     private MovieAdapter mMovieAdapter;
     private String jsonResponse;
     private static String status = NetworkUtilities.POPULAR;
+
+    private int mPosition = RecyclerView.NO_POSITION;
 
     @BindView(R.id.recyclerview_posters) RecyclerView mRecyclerView;
     @BindView(R.id.pb_loading_data) ProgressBar mLoadingData;
@@ -57,7 +66,11 @@ public class MainActivity extends AppCompatActivity implements
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        new FetchMovieTask().execute(status);
+        Intent serviceToStart = new Intent(this, PopMoviesIntentService.class);
+        startService(serviceToStart);
+
+        getSupportLoaderManager().initLoader(ID_MOVIE_LOADER, null, this);
+
     }
 
     private void showErrorMessage() {
@@ -115,18 +128,14 @@ public class MainActivity extends AppCompatActivity implements
 
         if(id == R.id.action_top_rated){
             status = NetworkUtilities.TOP_RATED;
-            mMovieAdapter.setMovieAdapterData(null);
-            new FetchMovieTask().execute(status);
+            getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
             showData();
-
         }
 
         if(id == R.id.action_popular){
             status = NetworkUtilities.POPULAR;
-            mMovieAdapter.setMovieAdapterData(null);
-            new FetchMovieTask().execute(status);
+            getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
             showData();
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -134,67 +143,70 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-//        TODO
-        return null;
+
+        int statusCode;
+
+        switch (status){
+            case NetworkUtilities.POPULAR:
+                statusCode = MoviesProvider.CODE_MOST_POPULAR;
+                break;
+
+            case NetworkUtilities.TOP_RATED:
+                statusCode= MoviesProvider.CODE_TOP_RATED;
+                break;
+
+            default:
+                throw new UnsupportedOperationException("wrong value");
+        }
+
+
+        switch (id){
+            case ID_MOVIE_LOADER:
+                Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
+                        .appendPath(String.valueOf(statusCode))
+                        .build();
+
+                String[] projection = new String[]{
+                        MoviesContract.MovieEntry.POSTER,
+                        MoviesContract.MovieEntry.MOVIE_ID,
+                        MoviesContract.MovieEntry.OVERVIEW
+                };
+
+                String sortOrder = MoviesContract.MovieEntry.MOVIE_ID;
+                CursorLoader loader = new CursorLoader(this,
+                        uri,
+                        projection,
+                        null,
+                        null,
+                        sortOrder
+                );
+
+                return loader;
+
+            default:
+                throw new RuntimeException("Loader Not Implemented" + id);
+        }
+
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//        TODO
 
+        mMovieAdapter.swapCursor(data);
+        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+        mRecyclerView.smoothScrollToPosition(mPosition);
+
+        if (data.getCount() != 0){
+            showData();
+        }else {
+            Log.e("ERROR", "data field is empty");
+            showErrorMessage();
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-//        TODO
-
+        mMovieAdapter.swapCursor(null);
     }
 
-    public class FetchMovieTask extends AsyncTask <String, Void, String[]>{
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingData.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected String[] doInBackground(String... params) {
-
-            if (params.length == 0) {
-                return null;
-            }
-
-            URL movies = NetworkUtilities.BuildUrl(params[0]);
-
-            Log.d("url: ", movies.toString());
-
-            try{
-                jsonResponse = NetworkUtilities.getResponseFromHttp(movies);
-
-                Log.d("FILM_INFO", jsonResponse);
-
-                return JsonDataParser.getPosters(jsonResponse);
-
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String[] strings) {
-            mLoadingData.setVisibility(View.INVISIBLE);
-
-            if(strings != null){
-                mMovieAdapter.setMovieAdapterData(strings);
-                mRecyclerView.setAdapter(mMovieAdapter);
-                showData();
-            }else{
-                showErrorMessage();
-            }
-
-        }
-    }
 }

@@ -28,20 +28,20 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_TABLE_STRING = "CREATE TABLE " + MovieEntry.NAME_TABLE +
 
-                " (" +
+                " ( " +
                 MovieEntry._ID                  + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                MovieEntry.MOVIE_ID             + " STRING PRIMARY KEY" +
+                MovieEntry.MOVIE_ID             + " TEXT NOT NULL, " +
                 MovieEntry.ORIGINAL_TITLE       + " TEXT NOT NULL, " +
                 MovieEntry.POSTER               + " TEXT NOT NULL, " +
                 MovieEntry.OVERVIEW             + " TEXT NOT NULL, " +
                 MovieEntry.RELEASE_DATE         + " INTEGER NOT NULL, " +
-                MovieEntry.VOTE_AVERAGE + " REAL NOT NULL, " +
+                MovieEntry.VOTE_AVERAGE         + " REAL NOT NULL, " +
 
                 //integers values 0 if false,
                 // > 0 if true
                 MovieEntry.IS_TOP_RATED         + " INTEGER DEFAULT 0, " +
                 MovieEntry.IS_MOST_POPULAR      + " INTEGER DEFAULT 0, " +
-                MovieEntry.IS_FAVOURITE         + " INTEGER DEFAULT 0, " +
+                MovieEntry.IS_FAVOURITE         + " INTEGER DEFAULT 0 " +
                 ");" ;
 
         db.execSQL(SQL_CREATE_TABLE_STRING);
