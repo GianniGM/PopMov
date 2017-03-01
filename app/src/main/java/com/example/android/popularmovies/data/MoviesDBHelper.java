@@ -35,7 +35,7 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
                 MovieEntry.POSTER               + " TEXT NOT NULL, " +
                 MovieEntry.OVERVIEW             + " TEXT NOT NULL, " +
                 MovieEntry.RELEASE_DATE         + " INTEGER NOT NULL, " +
-                MovieEntry.USER_RATING          + " REAL NOT NULL, " +
+                MovieEntry.VOTE_AVERAGE + " REAL NOT NULL, " +
 
                 //integers values 0 if false,
                 // > 0 if true

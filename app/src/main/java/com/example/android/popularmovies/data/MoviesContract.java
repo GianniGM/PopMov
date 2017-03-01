@@ -30,7 +30,7 @@ public class MoviesContract {
         public static final String POSTER = "poster_path";
         public static final String OVERVIEW = "overview";
         public static final String RELEASE_DATE = "release_date";
-        public static final String USER_RATING = "vote_average";
+        public static final String VOTE_AVERAGE = "vote_average";
         public static final String MOVIE_ID = "movie-id";
 
         //these two values can have only values true/false
