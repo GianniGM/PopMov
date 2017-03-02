@@ -37,7 +37,10 @@
             android:name=".data.MoviesProvider"
             android:exported="false" />
 
-        <service android:name=".sync.PopMoviesIntentService"
+        <!--Intent Service-->
+        <service
+            android:authorities="@string/content_authority"
+            android:name=".sync.PopMoviesIntentService"
             android:exported="false" />
 
     </application>

@@ -13,6 +13,8 @@ import android.util.Log;
 import com.example.android.popularmovies.R;
 
 import static com.example.android.popularmovies.data.MoviesContract.*;
+import static com.example.android.popularmovies.data.MoviesDBUtility.CODE_PATH_BEST;
+import static com.example.android.popularmovies.data.MoviesDBUtility.CODE_PATH_ID;
 
 /**
  * Created by giannig on 2/28/17.
@@ -39,10 +41,12 @@ public class MoviesProvider extends ContentProvider {
 
         final String authority = CONTENT_AUTHORITY;
         final String path = PATH_MOVIES;
+        final String pathToBest = path + "/" + CODE_PATH_BEST;
+        final String pathToId = path + "/" + CODE_PATH_ID;
 
         uriMatcher.addURI(authority, path, CODE_FAVOURITE);
-        uriMatcher.addURI(authority, path + "/*", CODE_BEST);
-        uriMatcher.addURI(authority, path + "/#", CODE_MOVIE_INFO);
+        uriMatcher.addURI(authority, pathToId +"/#", CODE_MOVIE_INFO);
+        uriMatcher.addURI(authority, pathToBest + "/*", CODE_BEST);
 
         return uriMatcher;
     }
@@ -96,9 +100,6 @@ public class MoviesProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
 
             case CODE_BEST: {
-                //bulk insertions are safe
-                db.beginTransaction();
-
                 String valueEntry = uri.getLastPathSegment();
                 int insertedRow = setFlagAndInsert(db, values, valueEntry);
 
@@ -124,7 +125,6 @@ public class MoviesProvider extends ContentProvider {
 
 //        String[] selectionArguments = new String[]{uri.getLastPathSegment()};
 
-        String[] selectionArguments = new String[]{"1"};
 
         //TODO CAPIRE QUESTA COSA DELLE QUERY
         Log.d("MoviesProvider", uri.toString());
@@ -132,27 +132,9 @@ public class MoviesProvider extends ContentProvider {
 //        TODO SISTEMARE QUI C'È QUALCOSA CHE NON VA: MATCHER E NEMMENO VALORI
         switch (sUriMatcher.match(uri)){
 
-            case CODE_BEST: {
-                String valueEntry = uri.getLastPathSegment();
-
-                cursor = mDBHelper.getReadableDatabase().query(
-                        MovieEntry.NAME_TABLE,
-                        projection,
-                        valueEntry + " >= ? ",
-                        selectionArguments,
-                        null,
-                        null,
-                        sortOrder
-                );
-
-                Log.e(TAG, uri + " " + valueEntry+ " " +String.valueOf(cursor.getCount()));
-
-            }
-            break;
-
             case CODE_MOVIE_INFO: {
                 String[] movieSelectionArguments = new String[]{uri.getLastPathSegment()};
-                String sel = MovieEntry._ID;
+                String sel = MovieEntry.MOVIE_ID;
 
                 cursor = mDBHelper.getReadableDatabase().query(
                         MovieEntry.NAME_TABLE,
@@ -161,15 +143,49 @@ public class MoviesProvider extends ContentProvider {
                         movieSelectionArguments,
                         null,
                         null,
-                        sortOrder
+                        null
                 );
 
-                Log.e(TAG, uri + " " + sel+ " " +String.valueOf(cursor.getCount()));
+                Log.e(TAG, uri + " GET MOVIE INFO " + uri.getLastPathSegment());
 
             }
             break;
 
+            case CODE_BEST: {
+                String valueEntry = uri.getLastPathSegment();
+
+                String[] selectionArguments = new String[]{"1"};
+
+
+//                cursor = mDBHelper.getReadableDatabase().query(
+//                        MovieEntry.NAME_TABLE,
+//                        projection,
+//                        valueEntry + " >= ? ",
+//                        selectionArguments,
+//                        null,
+//                        null,
+//                        sortOrder
+//                );
+                cursor = mDBHelper.getReadableDatabase().query(
+                        MovieEntry.NAME_TABLE,
+                        projection,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                );
+
+                Log.e(TAG, "CODE_BEST:" + uri + " " + valueEntry+ " " +String.valueOf(cursor.getCount()));
+
+            }
+            break;
+
+
+
             case CODE_FAVOURITE: {
+
+                String[] selectionArguments = new String[]{"1"};
 
                 cursor = mDBHelper.getReadableDatabase().query(
                         MovieEntry.NAME_TABLE,

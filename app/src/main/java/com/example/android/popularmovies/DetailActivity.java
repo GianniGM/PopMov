@@ -34,6 +34,8 @@ public class DetailActivity extends AppCompatActivity
     @BindView(R.id.tv_release_date) TextView mReleaseDate;
     @BindView(R.id.iv_image_detail) ImageView mImageViewPoster;
 
+    private int mMovie_ID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,42 +48,11 @@ public class DetailActivity extends AppCompatActivity
         if(intentThatStartedThis != null){
             if(intentThatStartedThis.hasExtra(Intent.EXTRA_TEXT)){
 
-//                int mMovie_ID = Integer.parseInt(intentThatStartedThis.getStringExtra(Intent.EXTRA_TEXT));
-                //todo sistemare qui che c' ètanto da fa fare
-//                String mMovieInfos = intentThatStartedThis.getStringExtra(Intent.EXTRA_TEXT);
-//
-//                try {
-//                    movieId = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.MOVIE_ID);
-//                    title = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.ORIGINAL_TITLE);
-//                    overview = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.OVERVIEW);
-//                    releaseDate = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.RELEASE_DATE);
-//                    userRating = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.USER_RATING);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    title = "NO TITLE";
-//                    overview = "NO OVERVIEW";
-//                    releaseDate = "NO DATA";
-//                    userRating = "0";
-//                }
-//
-//                Log.d(TAG, "title: " + title);
-//                Log.d(TAG, "overview: " + overview);
-//
-//
-//                String url;
-//
-//                try {
-//                    String image = JsonDataParser.getMovieInfo(mMovieInfos, JsonDataParser.POSTER);
-//                    url = NetworkUtilities.imageURLBuilder(image, NetworkUtilities.IMAGE_LARGE);
-//                    Log.d(TAG, "RECEIVED URL: " + url);
-
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                 mMovie_ID = Integer.parseInt(intentThatStartedThis.getStringExtra(Intent.EXTRA_TEXT));
             }
         }
 
+        //TODO
         //1. controllare che non sia tra i favoriti
         //2. se è tra i favoriti cambiare il testo del pulsante
         //3. altrimenti lasciare così com'è
@@ -110,7 +81,8 @@ public class DetailActivity extends AppCompatActivity
         switch (id){
             case ID_MOVIE_DETAILS_LOADER:
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
-                        .appendPath(MoviesContract.MovieEntry.MOVIE_ID)
+                        .appendPath(CODE_PATH_ID)
+                        .appendPath(String.valueOf(mMovie_ID))
                         .build();
 
                 Log.e(TAG, uri.toString());

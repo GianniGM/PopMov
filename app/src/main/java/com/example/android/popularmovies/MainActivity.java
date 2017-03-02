@@ -26,6 +26,8 @@ import com.example.android.popularmovies.sync.PopMoviesIntentService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.android.popularmovies.data.MoviesDBUtility.CODE_PATH_BEST;
+
 public class MainActivity extends AppCompatActivity implements
         MovieAdapter.MovieAdapterOnClickHandler,
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.tv_error_msg) TextView mErrorMessageTextView;
 
     //TODO ELIMINARE QUANDO CI SARANNO I JOBS
-    private boolean primoAvvio = false;
+    private static boolean primoAvvio = true;
 
 
     @Override
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements
             primoAvvio = false;
         }
 
+
     }
 
     private void showErrorMessage() {
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements
         Class destClass = DetailActivity.class;
 
         Intent intentToStartActivity = new Intent(ctx, destClass);
+        intentToStartActivity.putExtra(Intent.EXTRA_TEXT, movieID);
         startActivity(intentToStartActivity);
 
     }
@@ -123,13 +127,14 @@ public class MainActivity extends AppCompatActivity implements
         if(id == R.id.action_top_rated){
             status = MoviesContract.MovieEntry.IS_TOP_RATED;
             getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
-            showData();
+            mLoadingData.setVisibility(View.VISIBLE);
         }
 
         if(id == R.id.action_popular){
             status = MoviesContract.MovieEntry.IS_MOST_POPULAR;
             getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
             showData();
+            mLoadingData.setVisibility(View.VISIBLE);
         }
 
         return super.onOptionsItemSelected(item);
@@ -138,11 +143,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        mLoadingData.setVisibility(View.VISIBLE);
+
+
         switch (id){
             case ID_MOVIE_LOADER:
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
+                        .appendPath(CODE_PATH_BEST)
                         .appendPath(status)
                         .build();
+
+                Log.d(TAG, uri.toString());
 
                 String[] projection = new String[]{
                         MoviesContract.MovieEntry.POSTER,
@@ -182,6 +193,8 @@ public class MainActivity extends AppCompatActivity implements
             Log.e("ERROR", "data field is empty");
             showErrorMessage();
         }
+        mLoadingData.setVisibility(View.GONE);
+
     }
 
     @Override

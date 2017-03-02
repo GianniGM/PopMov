@@ -30,6 +30,7 @@ public class MovieSyncTask implements Callback<Movies>{
     private static String TYPE = NetworkUtilities.POPULAR;
 
     synchronized public static MovieSyncTask startSynchronizing(Context ctx){
+        Log.d(TAG, "Service ssssssssssssssssssssssssssssssssssssssssssssssssssssss");
 
         MovieSyncTask m = new MovieSyncTask();
         m.Start(ctx);
@@ -42,7 +43,7 @@ public class MovieSyncTask implements Callback<Movies>{
 
     private void Start(Context ctx){
 
-        Log.d(TAG, "Service Started");
+        Log.d(TAG, "Service Startedffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         instance = buildMovieInstance();
         loadMovieData(TYPE);
         context = ctx;
@@ -81,6 +82,7 @@ public class MovieSyncTask implements Callback<Movies>{
             case NetworkUtilities.POPULAR:
 
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
+                        .appendPath(MoviesDBUtility.CODE_PATH_BEST)
                         .appendPath(MoviesContract.MovieEntry.IS_MOST_POPULAR)
                         .build();
 
@@ -93,6 +95,7 @@ public class MovieSyncTask implements Callback<Movies>{
             case NetworkUtilities.TOP_RATED:
 
                 uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
+                        .appendPath(MoviesDBUtility.CODE_PATH_BEST)
                         .appendPath(MoviesContract.MovieEntry.IS_TOP_RATED)
                         .build();
 

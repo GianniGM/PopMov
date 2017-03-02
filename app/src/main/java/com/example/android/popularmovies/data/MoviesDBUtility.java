@@ -37,6 +37,9 @@ public class MoviesDBUtility {
     public static final int INDEX_OVERVIEW = 4;
     public static final int INDEX_RELEASE_DATE = 5;
 
+    public static final String CODE_PATH_BEST = "best";
+    public static final String CODE_PATH_ID = "id";
+
     public static int addInDB(Uri uri, Movies body, Context ctx){
         Movie[] moviesArray = body.getMovies();
 
