@@ -3,17 +3,14 @@ package com.example.android.popularmovies;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.android.popularmovies.data.MoviesContract;
-import com.example.android.popularmovies.data.MoviesDBUtility;
-import com.example.android.popularmovies.utilities.NetworkUtilities;
 import com.squareup.picasso.Picasso;
 
+import static com.example.android.popularmovies.data.MoviesDBUtility.INDEX_MOVIE_ID;
 import static com.example.android.popularmovies.data.MoviesDBUtility.INDEX_POSTER;
 
 /**
@@ -40,7 +37,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
     public interface MovieAdapterOnClickHandler {
-        void onClick(int movieDetails);
+        void onClick(String movieDetails);
     }
 
     @Override
@@ -85,9 +82,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
         @Override
         public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
 
-            mClickHandler.onClick(adapterPosition);
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+            String movieID = mCursor.getString(INDEX_MOVIE_ID);
+            mClickHandler.onClick(movieID);
         }
     }
 }

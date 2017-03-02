@@ -1,4 +1,6 @@
-package com.example.android.popularmovies.utilities;
+package com.example.android.popularmovies.movies;
+
+import com.example.android.popularmovies.utilities.NetworkUtilities;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

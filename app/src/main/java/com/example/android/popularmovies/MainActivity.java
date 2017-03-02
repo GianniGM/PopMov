@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -20,19 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.popularmovies.data.MoviesContract;
-import com.example.android.popularmovies.data.MoviesProvider;
-import com.example.android.popularmovies.sync.MovieSyncTask;
 import com.example.android.popularmovies.sync.PopMoviesIntentService;
-import com.example.android.popularmovies.utilities.JsonDataParser;
-import com.example.android.popularmovies.utilities.NetworkUtilities;
-
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.pb_loading_data) ProgressBar mLoadingData;
     @BindView(R.id.tv_error_msg) TextView mErrorMessageTextView;
 
-    //TODO
+    //TODO ELIMINARE QUANDO CI SARANNO I JOBS
     private boolean primoAvvio = false;
 
 
@@ -110,11 +99,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onClick(int movieDetails) {
-
-
-        //TODO CREATE INTENT AND NOT PASS ANYTHING
-        // YOU WILL GET THE INFO FROM DB WITH A QUERY
+    public void onClick(String movieID) {
 
         Context ctx = this;
         Class destClass = DetailActivity.class;

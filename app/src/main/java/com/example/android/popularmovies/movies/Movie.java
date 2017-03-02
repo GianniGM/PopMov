@@ -1,4 +1,4 @@
-package com.example.android.popularmovies.utilities;
+package com.example.android.popularmovies.movies;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

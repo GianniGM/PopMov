@@ -53,9 +53,5 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public static boolean valueIsTrue(int value){
-        if (value > 0) return true;
-        else return false;
-    }
 }
 

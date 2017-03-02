@@ -21,8 +21,13 @@ import static com.example.android.popularmovies.data.MoviesContract.*;
 
 public class MoviesProvider extends ContentProvider {
     //TODO DON'T REMBER IN THE INSERT THE VALUES TRUE/FALSE AND THE APPROPRIATE QUERIES
+
+    private static final String TAG = MoviesProvider.class.getSimpleName();
+
     public static final int CODE_BEST = 100;
     public static final int CODE_FAVOURITE = 101;
+    private static final int CODE_MOVIE_INFO = 102;
+
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final int IS_TRUE = 1;
@@ -37,6 +42,7 @@ public class MoviesProvider extends ContentProvider {
 
         uriMatcher.addURI(authority, path, CODE_FAVOURITE);
         uriMatcher.addURI(authority, path + "/*", CODE_BEST);
+        uriMatcher.addURI(authority, path + "/#", CODE_MOVIE_INFO);
 
         return uriMatcher;
     }
@@ -139,7 +145,26 @@ public class MoviesProvider extends ContentProvider {
                         sortOrder
                 );
 
-                Log.e("FFFFFFFF", uri + " " + valueEntry+ " " +String.valueOf(cursor.getCount()));
+                Log.e(TAG, uri + " " + valueEntry+ " " +String.valueOf(cursor.getCount()));
+
+            }
+            break;
+
+            case CODE_MOVIE_INFO: {
+                String[] movieSelectionArguments = new String[]{uri.getLastPathSegment()};
+                String sel = MovieEntry._ID;
+
+                cursor = mDBHelper.getReadableDatabase().query(
+                        MovieEntry.NAME_TABLE,
+                        projection,
+                        sel + " = ? ",
+                        movieSelectionArguments,
+                        null,
+                        null,
+                        sortOrder
+                );
+
+                Log.e(TAG, uri + " " + sel+ " " +String.valueOf(cursor.getCount()));
 
             }
             break;
@@ -156,7 +181,7 @@ public class MoviesProvider extends ContentProvider {
                         sortOrder
                 );
                 //TODO SOLO QUI FUNZIONA NON NEGLI ALTRI MATCH
-                Log.e("FFFFFFFF", String.valueOf(cursor.getCount()));
+                Log.e(TAG, String.valueOf(cursor.getCount()));
 
             }
             break;

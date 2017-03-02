@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.example.android.popularmovies.data.MoviesContract;
 import com.example.android.popularmovies.data.MoviesDBUtility;
-import com.example.android.popularmovies.utilities.Movies;
-import com.example.android.popularmovies.utilities.MoviesInterface;
+import com.example.android.popularmovies.movies.Movies;
+import com.example.android.popularmovies.movies.MoviesInterface;
 import com.example.android.popularmovies.utilities.NetworkUtilities;
 
 import retrofit2.Call;
@@ -76,12 +76,6 @@ public class MovieSyncTask implements Callback<Movies>{
             return;
         }
 
-
-        //TODO REMOVE ALL FOR
-//        for(int i = 0; i < 4; i ++){
-//            String r = response.body().getMovies()[i].getOverview().toString();
-//            Log.e(TAG, r);
-//        }
 
         switch (TYPE){
             case NetworkUtilities.POPULAR:

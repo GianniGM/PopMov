@@ -4,10 +4,9 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
-import com.example.android.popularmovies.utilities.Movie;
-import com.example.android.popularmovies.utilities.Movies;
+import com.example.android.popularmovies.movies.Movie;
+import com.example.android.popularmovies.movies.Movies;
 import com.example.android.popularmovies.data.MoviesContract.MovieEntry;
 import com.example.android.popularmovies.utilities.NetworkUtilities;
 
@@ -23,12 +22,12 @@ public class MoviesDBUtility {
 
     //TODO MIGLIORARE STA ROBA QUA
     public static final String[] MOVIE_PROJECTION = {
-            MovieEntry.POSTER,
-            MovieEntry.MOVIE_ID,
-            MovieEntry.ORIGINAL_TITLE,
-            MovieEntry.VOTE_AVERAGE,
-            MovieEntry.OVERVIEW,
-            MovieEntry.RELEASE_DATE,
+            MoviesContract.MovieEntry.POSTER,
+            MoviesContract.MovieEntry.MOVIE_ID,
+            MoviesContract.MovieEntry.ORIGINAL_TITLE,
+            MoviesContract.MovieEntry.VOTE_AVERAGE,
+            MoviesContract.MovieEntry.OVERVIEW,
+            MoviesContract.MovieEntry.RELEASE_DATE,
     };
 
     public static final int INDEX_POSTER = 0;
@@ -37,9 +36,6 @@ public class MoviesDBUtility {
     public static final int INDEX_VOTE_AVERAGE = 3;
     public static final int INDEX_OVERVIEW = 4;
     public static final int INDEX_RELEASE_DATE = 5;
-
-    private static final int IS_TRUE = 1;
-    private static final int IS_FALSE = 0;
 
     public static int addInDB(Uri uri, Movies body, Context ctx){
         Movie[] moviesArray = body.getMovies();
@@ -59,10 +55,7 @@ public class MoviesDBUtility {
             c.put(MovieEntry.VOTE_AVERAGE, m.getVoteAverage());
 
             String posterPath = NetworkUtilities.imageURLBuilder(m.getPosterPath(), NetworkUtilities.IMAGE_LARGE);
-// TODO            Log.e("POSTERPATH:", posterPath );
             c.put(MovieEntry.POSTER, posterPath);
-
-//            c.put(type, IS_TRUE);
 
             contentValuesArray[i] = c;
 
@@ -71,15 +64,6 @@ public class MoviesDBUtility {
         if (contentValuesArray.length != 0){
             ContentResolver contentResolver = ctx.getContentResolver();
 
-//            TODO
-//            contentResolver.delete(
-//                    MovieEntry.CONTENT_URI,
-//                    null,
-//                    null
-//            );
-
-
-//            inserted = contentResolver.bulkInsert(MovieEntry.CONTENT_URI, contentValuesArray);
             inserted = contentResolver.bulkInsert(uri, contentValuesArray);
 
         }
@@ -87,11 +71,4 @@ public class MoviesDBUtility {
         return inserted;
     }
 
-//    public static int addTopRatedInDB(Movies body, Context ctx) {
-//        return addInDB(body,ctx,MovieEntry.IS_TOP_RATED);
-//    }
-//
-//    public static int addMostPopularInDB(Movies body, Context ctx) {
-//        return addInDB(body,ctx,MovieEntry.IS_MOST_POPULAR);
-//    }
 }
