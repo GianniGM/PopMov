@@ -118,7 +118,7 @@ public class MoviesProvider extends ContentProvider {
 
 //        String[] selectionArguments = new String[]{uri.getLastPathSegment()};
 
-        String[] selectionArguments = new String[]{"0"};
+        String[] selectionArguments = new String[]{"1"};
 
         //TODO CAPIRE QUESTA COSA DELLE QUERY
         Log.d("MoviesProvider", uri.toString());
@@ -145,11 +145,12 @@ public class MoviesProvider extends ContentProvider {
             break;
 
             case CODE_FAVOURITE: {
+
                 cursor = mDBHelper.getReadableDatabase().query(
                         MovieEntry.NAME_TABLE,
                         projection,
-                        null,
-                        null,
+                        MovieEntry.IS_FAVOURITE + " >= ? ",
+                        selectionArguments,
                         null,
                         null,
                         sortOrder
@@ -161,9 +162,6 @@ public class MoviesProvider extends ContentProvider {
             break;
 
             default:
-                //TODO hardcoded here, must to fix this
-                Log.e("FFFFFFFF", "ECCEZIONE DEL CAZZO");
-
                 throw new UnsupportedOperationException(getContext().getString(
                         R.string.error_invalid_uri,
                         uri

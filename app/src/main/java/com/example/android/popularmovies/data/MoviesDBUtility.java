@@ -21,21 +21,22 @@ import com.example.android.popularmovies.utilities.NetworkUtilities;
 
 public class MoviesDBUtility {
 
+    //TODO MIGLIORARE STA ROBA QUA
     public static final String[] MOVIE_PROJECTION = {
+            MovieEntry.POSTER,
             MovieEntry.MOVIE_ID,
-            MovieEntry.RELEASE_DATE,
             MovieEntry.ORIGINAL_TITLE,
             MovieEntry.VOTE_AVERAGE,
             MovieEntry.OVERVIEW,
-            MovieEntry.POSTER,
+            MovieEntry.RELEASE_DATE,
     };
 
-    public static final int INDEX_MOVIE_ID = 0;
-    public static final int INDEX_RELEASE_DATE = 1;
+    public static final int INDEX_POSTER = 0;
+    public static final int INDEX_MOVIE_ID = 1;
     public static final int INDEX_ORIGINAL_TITLE = 2;
     public static final int INDEX_VOTE_AVERAGE = 3;
     public static final int INDEX_OVERVIEW = 4;
-    public static final int INDEX_POSTER = 5;
+    public static final int INDEX_RELEASE_DATE = 5;
 
     private static final int IS_TRUE = 1;
     private static final int IS_FALSE = 0;

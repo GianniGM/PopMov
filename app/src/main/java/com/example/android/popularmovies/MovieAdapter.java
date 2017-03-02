@@ -14,6 +14,8 @@ import com.example.android.popularmovies.data.MoviesDBUtility;
 import com.example.android.popularmovies.utilities.NetworkUtilities;
 import com.squareup.picasso.Picasso;
 
+import static com.example.android.popularmovies.data.MoviesDBUtility.INDEX_POSTER;
+
 /**
  * Created by giannig on 20/01/17.
  * this is the adapter that handle RecyclerView
@@ -59,14 +61,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         mCursor.moveToPosition(position);
 
         //TODO index poster
-        String posterURL=mCursor.getString(0);
-
-
-        //TODO DEBUG
-//        for(int i = 0; i < 4; i ++) {
-//            String s = mCursor.getString(i);
-//            Log.d(TAG, "LOADED DATA " + s);
-//        }
+        String posterURL=mCursor.getString(INDEX_POSTER);
 
         Picasso.with(ctx).load(posterURL).into(holder.mPosterView);
     }

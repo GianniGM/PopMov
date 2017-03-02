@@ -41,16 +41,22 @@ public class MainActivity extends AppCompatActivity implements
         MovieAdapter.MovieAdapterOnClickHandler,
         LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     private static final int ID_MOVIE_LOADER = 8522;
-    private MovieAdapter mMovieAdapter;
-    private String jsonResponse;
+
     private static String status = MoviesContract.MovieEntry.IS_MOST_POPULAR;
+
+    private MovieAdapter mMovieAdapter;
 
     private int mPosition = RecyclerView.NO_POSITION;
 
     @BindView(R.id.recyclerview_posters) RecyclerView mRecyclerView;
     @BindView(R.id.pb_loading_data) ProgressBar mLoadingData;
     @BindView(R.id.tv_error_msg) TextView mErrorMessageTextView;
+
+    //TODO
+    private boolean primoAvvio = false;
 
 
     @Override
@@ -66,10 +72,20 @@ public class MainActivity extends AppCompatActivity implements
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        Intent serviceToStart = new Intent(this, PopMoviesIntentService.class);
-        startService(serviceToStart);
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader loader = loaderManager.getLoader(ID_MOVIE_LOADER);
 
-        getSupportLoaderManager().initLoader(ID_MOVIE_LOADER, null, this);
+        if(loader == null){
+            loaderManager.initLoader(ID_MOVIE_LOADER, null, this);
+        }else{
+            loaderManager.restartLoader(ID_MOVIE_LOADER, null, this);
+        }
+
+        if(primoAvvio){
+            Intent serviceToStart = new Intent(this, PopMoviesIntentService.class);
+            startService(serviceToStart);
+            primoAvvio = false;
+        }
 
     }
 
@@ -96,23 +112,16 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onClick(int movieDetails) {
 
-        String s;
-        try {
-            s = JsonDataParser.getMovieInfo(jsonResponse, movieDetails);
-        } catch (JSONException e) {
-            e.printStackTrace();
 
-            Toast.makeText(this, "Error on receiving data", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        //TODO CREATE INTENT AND NOT PASS ANYTHING
+        // YOU WILL GET THE INFO FROM DB WITH A QUERY
 
         Context ctx = this;
-         Class destClass = DetailActivity.class;
+        Class destClass = DetailActivity.class;
 
         Intent intentToStartActivity = new Intent(ctx, destClass);
-        intentToStartActivity.putExtra(Intent.EXTRA_TEXT, s);
-
         startActivity(intentToStartActivity);
+
     }
 
     @Override
@@ -156,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements
                         MoviesContract.MovieEntry.OVERVIEW
                 };
 
-                String sortOrder = MoviesContract.MovieEntry.MOVIE_ID;
+                String sortOrder = MoviesContract.MovieEntry._ID;
                 CursorLoader loader = new CursorLoader(this,
                         uri,
                         projection,
@@ -175,6 +184,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        Log.d(TAG, "loader finished");
 
         mMovieAdapter.swapCursor(data);
         if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
