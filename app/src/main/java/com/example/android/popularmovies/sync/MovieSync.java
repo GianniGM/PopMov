@@ -20,30 +20,30 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by giannig on 3/1/17.
  */
 
-public class MovieSyncTask implements Callback<Movies>{
+public class MovieSync implements Callback<Movies>{
 
-    private static final String TAG = MovieSyncTask.class.getSimpleName();
+    private static final String TAG = MovieSync.class.getSimpleName();
     private MoviesInterface instance;
     private Call<Movies> retrofitCall;
     private Context context;
 
     private static String TYPE = NetworkUtilities.POPULAR;
 
-    synchronized public static MovieSyncTask startSynchronizing(Context ctx){
-        Log.d(TAG, "Service ssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+    synchronized public static MovieSync startSynchronizing(Context ctx){
+        Log.d(TAG, "Loading service");
 
-        MovieSyncTask m = new MovieSyncTask();
+        MovieSync m = new MovieSync();
         m.Start(ctx);
         return m;
     }
 
-    synchronized public static void stopSynchronizing(MovieSyncTask m){
+    synchronized public static void stopSynchronizing(MovieSync m){
         m.Stop();
     }
 
     private void Start(Context ctx){
 
-        Log.d(TAG, "Service Startedffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        Log.d(TAG, "Service started");
         instance = buildMovieInstance();
         loadMovieData(TYPE);
         context = ctx;
@@ -82,7 +82,7 @@ public class MovieSyncTask implements Callback<Movies>{
             case NetworkUtilities.POPULAR:
 
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
-                        .appendPath(MoviesDBUtility.CODE_PATH_BEST)
+                        .appendPath(MoviesDBUtility.NAME_PATH_BEST)
                         .appendPath(MoviesContract.MovieEntry.IS_MOST_POPULAR)
                         .build();
 
@@ -95,7 +95,7 @@ public class MovieSyncTask implements Callback<Movies>{
             case NetworkUtilities.TOP_RATED:
 
                 uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
-                        .appendPath(MoviesDBUtility.CODE_PATH_BEST)
+                        .appendPath(MoviesDBUtility.NAME_PATH_BEST)
                         .appendPath(MoviesContract.MovieEntry.IS_TOP_RATED)
                         .build();
 

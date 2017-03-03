@@ -33,6 +33,7 @@ public class DetailActivity extends AppCompatActivity
     @BindView(R.id.tv_user_ratings) TextView mUserRating;
     @BindView(R.id.tv_release_date) TextView mReleaseDate;
     @BindView(R.id.iv_image_detail) ImageView mImageViewPoster;
+    @BindView(R.id.movie_details) View mMovieDetails;
 
     private int mMovie_ID;
 
@@ -78,10 +79,12 @@ public class DetailActivity extends AppCompatActivity
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        mMovieDetails.setVisibility(View.INVISIBLE);
+
         switch (id){
             case ID_MOVIE_DETAILS_LOADER:
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
-                        .appendPath(CODE_PATH_ID)
+                        .appendPath(NAME_PATH_ID)
                         .appendPath(String.valueOf(mMovie_ID))
                         .build();
 
@@ -129,6 +132,7 @@ public class DetailActivity extends AppCompatActivity
             .error(R.drawable.placeholder_error)
             .into(mImageViewPoster);
 
+        mMovieDetails.setVisibility(View.VISIBLE);
     }
 
     @Override

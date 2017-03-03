@@ -21,12 +21,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.data.MoviesContract;
-import com.example.android.popularmovies.sync.PopMoviesIntentService;
+import com.example.android.popularmovies.sync.PopMoviesSyncUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.android.popularmovies.data.MoviesDBUtility.CODE_PATH_BEST;
+import static com.example.android.popularmovies.data.MoviesDBUtility.NAME_PATH_BEST;
 
 public class MainActivity extends AppCompatActivity implements
         MovieAdapter.MovieAdapterOnClickHandler,
@@ -45,9 +45,6 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.recyclerview_posters) RecyclerView mRecyclerView;
     @BindView(R.id.pb_loading_data) ProgressBar mLoadingData;
     @BindView(R.id.tv_error_msg) TextView mErrorMessageTextView;
-
-    //TODO ELIMINARE QUANDO CI SARANNO I JOBS
-    private static boolean primoAvvio = true;
 
 
     @Override
@@ -72,12 +69,11 @@ public class MainActivity extends AppCompatActivity implements
             loaderManager.restartLoader(ID_MOVIE_LOADER, null, this);
         }
 
-        if(primoAvvio){
-            Intent serviceToStart = new Intent(this, PopMoviesIntentService.class);
-            startService(serviceToStart);
-            primoAvvio = false;
-        }
+        PopMoviesSyncUtils.initialize(this);
 
+        mLoadingData.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+        mErrorMessageTextView.setVisibility(View.INVISIBLE);
 
     }
 
@@ -128,13 +124,17 @@ public class MainActivity extends AppCompatActivity implements
             status = MoviesContract.MovieEntry.IS_TOP_RATED;
             getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
             mLoadingData.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+            mErrorMessageTextView.setVisibility(View.GONE);
+
         }
 
         if(id == R.id.action_popular){
             status = MoviesContract.MovieEntry.IS_MOST_POPULAR;
             getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
-            showData();
             mLoadingData.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+            mErrorMessageTextView.setVisibility(View.GONE);
         }
 
         return super.onOptionsItemSelected(item);
@@ -143,13 +143,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        mLoadingData.setVisibility(View.VISIBLE);
-
-
         switch (id){
             case ID_MOVIE_LOADER:
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
-                        .appendPath(CODE_PATH_BEST)
+                        .appendPath(NAME_PATH_BEST)
                         .appendPath(status)
                         .build();
 
@@ -187,13 +184,13 @@ public class MainActivity extends AppCompatActivity implements
         if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
         mRecyclerView.smoothScrollToPosition(mPosition);
 
+        mLoadingData.setVisibility(View.GONE);
         if (data.getCount() != 0){
             showData();
         }else {
             Log.e("ERROR", "data field is empty");
             showErrorMessage();
         }
-        mLoadingData.setVisibility(View.GONE);
 
     }
 

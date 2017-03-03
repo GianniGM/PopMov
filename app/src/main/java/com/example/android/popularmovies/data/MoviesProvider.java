@@ -13,8 +13,8 @@ import android.util.Log;
 import com.example.android.popularmovies.R;
 
 import static com.example.android.popularmovies.data.MoviesContract.*;
-import static com.example.android.popularmovies.data.MoviesDBUtility.CODE_PATH_BEST;
-import static com.example.android.popularmovies.data.MoviesDBUtility.CODE_PATH_ID;
+import static com.example.android.popularmovies.data.MoviesDBUtility.NAME_PATH_BEST;
+import static com.example.android.popularmovies.data.MoviesDBUtility.NAME_PATH_ID;
 
 /**
  * Created by giannig on 2/28/17.
@@ -41,8 +41,8 @@ public class MoviesProvider extends ContentProvider {
 
         final String authority = CONTENT_AUTHORITY;
         final String path = PATH_MOVIES;
-        final String pathToBest = path + "/" + CODE_PATH_BEST;
-        final String pathToId = path + "/" + CODE_PATH_ID;
+        final String pathToBest = path + "/" + NAME_PATH_BEST;
+        final String pathToId = path + "/" + NAME_PATH_ID;
 
         uriMatcher.addURI(authority, path, CODE_FAVOURITE);
         uriMatcher.addURI(authority, pathToId +"/#", CODE_MOVIE_INFO);
@@ -157,23 +157,14 @@ public class MoviesProvider extends ContentProvider {
                 String[] selectionArguments = new String[]{"1"};
 
 
-//                cursor = mDBHelper.getReadableDatabase().query(
-//                        MovieEntry.NAME_TABLE,
-//                        projection,
-//                        valueEntry + " >= ? ",
-//                        selectionArguments,
-//                        null,
-//                        null,
-//                        sortOrder
-//                );
                 cursor = mDBHelper.getReadableDatabase().query(
                         MovieEntry.NAME_TABLE,
                         projection,
+                        valueEntry + " >= ? ",
+                        selectionArguments,
                         null,
                         null,
-                        null,
-                        null,
-                        null
+                        sortOrder
                 );
 
                 Log.e(TAG, "CODE_BEST:" + uri + " " + valueEntry+ " " +String.valueOf(cursor.getCount()));
