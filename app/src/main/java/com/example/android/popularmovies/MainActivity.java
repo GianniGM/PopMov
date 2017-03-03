@@ -2,7 +2,11 @@ package com.example.android.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.database.Cursor;
+import android.net.Uri;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,24 +19,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.android.popularmovies.utilities.JsonDataParser;
-import com.example.android.popularmovies.utilities.NetworkUtilities;
-
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URL;
+import com.example.android.popularmovies.data.MoviesContract;
+import com.example.android.popularmovies.sync.PopMoviesSyncUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
+import static com.example.android.popularmovies.data.MoviesDBUtility.NAME_PATH_BEST;
+
+public class MainActivity extends AppCompatActivity implements
+        MovieAdapter.MovieAdapterOnClickHandler,
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final int ID_MOVIE_LOADER = 8522;
+
+    private static String status = MoviesContract.MovieEntry.IS_MOST_POPULAR;
 
     private MovieAdapter mMovieAdapter;
-    private String jsonResponse;
-    private static String status = NetworkUtilities.POPULAR;
+
+    private int mPosition = RecyclerView.NO_POSITION;
 
     @BindView(R.id.recyclerview_posters) RecyclerView mRecyclerView;
     @BindView(R.id.pb_loading_data) ProgressBar mLoadingData;
@@ -52,7 +60,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        new FetchMovieTask().execute(status);
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader loader = loaderManager.getLoader(ID_MOVIE_LOADER);
+
+        if(loader == null){
+            loaderManager.initLoader(ID_MOVIE_LOADER, null, this);
+        }else{
+            loaderManager.restartLoader(ID_MOVIE_LOADER, null, this);
+        }
+
+        PopMoviesSyncUtils.initialize(this);
+
+        mLoadingData.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+        mErrorMessageTextView.setVisibility(View.INVISIBLE);
+
     }
 
     private void showErrorMessage() {
@@ -76,25 +98,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void onClick(int movieDetails) {
-
-        String s;
-        try {
-            s = JsonDataParser.getMovieInfo(jsonResponse, movieDetails);
-        } catch (JSONException e) {
-            e.printStackTrace();
-
-            Toast.makeText(this, "Error on receiving data", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    public void onClick(String movieID) {
 
         Context ctx = this;
-         Class destClass = DetailActivity.class;
+        Class destClass = DetailActivity.class;
 
         Intent intentToStartActivity = new Intent(ctx, destClass);
-        intentToStartActivity.putExtra(Intent.EXTRA_TEXT, s);
-
+        intentToStartActivity.putExtra(Intent.EXTRA_TEXT, movieID);
         startActivity(intentToStartActivity);
+
     }
 
     @Override
@@ -109,69 +121,82 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int id = item.getItemId();
 
         if(id == R.id.action_top_rated){
-            status = NetworkUtilities.TOP_RATED;
-            mMovieAdapter.setMovieAdapterData(null);
-            new FetchMovieTask().execute(status);
-            showData();
+            status = MoviesContract.MovieEntry.IS_TOP_RATED;
+            getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
+            mLoadingData.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+            mErrorMessageTextView.setVisibility(View.GONE);
 
         }
 
         if(id == R.id.action_popular){
-            status = NetworkUtilities.POPULAR;
-            mMovieAdapter.setMovieAdapterData(null);
-            new FetchMovieTask().execute(status);
-            showData();
-
+            status = MoviesContract.MovieEntry.IS_MOST_POPULAR;
+            getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
+            mLoadingData.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+            mErrorMessageTextView.setVisibility(View.GONE);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public class FetchMovieTask extends AsyncTask <String, Void, String[]>{
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingData.setVisibility(View.VISIBLE);
+        switch (id){
+            case ID_MOVIE_LOADER:
+                Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
+                        .appendPath(NAME_PATH_BEST)
+                        .appendPath(status)
+                        .build();
+
+                Log.d(TAG, uri.toString());
+
+                String[] projection = new String[]{
+                        MoviesContract.MovieEntry.POSTER,
+                        MoviesContract.MovieEntry.MOVIE_ID,
+                        MoviesContract.MovieEntry.OVERVIEW
+                };
+
+                String sortOrder = MoviesContract.MovieEntry._ID;
+                CursorLoader loader = new CursorLoader(this,
+                        uri,
+                        projection,
+                        null,
+                        null,
+                        sortOrder
+                );
+
+                return loader;
+
+            default:
+                throw new RuntimeException("Loader Not Implemented" + id);
         }
 
-        @Override
-        protected String[] doInBackground(String... params) {
-
-            if (params.length == 0) {
-                return null;
-            }
-
-            URL movies = NetworkUtilities.BuildUrl(params[0]);
-
-            Log.d("url: ", movies.toString());
-
-            try{
-                jsonResponse = NetworkUtilities.getResponseFromHttp(movies);
-
-                Log.d("FILM_INFO", jsonResponse);
-
-                return JsonDataParser.getPosters(jsonResponse);
-
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String[] strings) {
-            mLoadingData.setVisibility(View.INVISIBLE);
-
-            if(strings != null){
-                mMovieAdapter.setMovieAdapterData(strings);
-                mRecyclerView.setAdapter(mMovieAdapter);
-                showData();
-            }else{
-                showErrorMessage();
-            }
-
-        }
     }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        Log.d(TAG, "loader finished");
+
+        mMovieAdapter.swapCursor(data);
+        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+        mRecyclerView.smoothScrollToPosition(mPosition);
+
+        mLoadingData.setVisibility(View.GONE);
+        if (data.getCount() != 0){
+            showData();
+        }else {
+            Log.e("ERROR", "data field is empty");
+            showErrorMessage();
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mMovieAdapter.swapCursor(null);
+    }
+
 }
