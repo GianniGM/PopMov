@@ -17,6 +17,7 @@ public class NetworkUtilities {
     private final static String TAG = NetworkUtilities.class.getSimpleName();
     public final static String api_key = "INSERT YOU API KEY HERE";
 
+
     public final static String QUERY_APY_KEY = "api_key";
     public final static String TYPE = "movie";
 
