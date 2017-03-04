@@ -10,12 +10,14 @@ public class NetworkUtilities {
 
     public final static String POPULAR = "popular";
     public final static String TOP_RATED = "top_rated";
-//    public final static String IMAGE_SMALL = "w185/";
+//  public final static String IMAGE_SMALL = "w185/";
     public final static String IMAGE_LARGE = "w500/";
+
 
 
     private final static String TAG = NetworkUtilities.class.getSimpleName();
     public final static String api_key = "INSERT YOU API KEY HERE";
+
 
 
     public final static String QUERY_APY_KEY = "api_key";

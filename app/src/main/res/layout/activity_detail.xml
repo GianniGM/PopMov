@@ -35,22 +35,16 @@
             android:orientation="vertical">
 
 
-            <include
-                layout="@layout/movie_details"
+            <include layout="@layout/movie_details"
+                android:layout_marginBottom="8dp"
                 android:focusable="false"
-                android:id="@+id/movie_details"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:visibility="invisible"
-             />
-
+                android:layout_height="wrap_content" />
 
             <include layout="@layout/trailers_list"
-                android:focusable="false"
-                android:id="@+id/trailers_list"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:visibility="invisible"/>
+                android:focusable="false"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </ScrollView>

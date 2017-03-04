@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.TransactionTooLargeException;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -48,7 +48,6 @@ public class DetailActivity extends AppCompatActivity
     @BindView(R.id.tv_user_ratings) TextView mUserRating;
     @BindView(R.id.tv_release_date) TextView mReleaseDate;
     @BindView(R.id.iv_image_detail) ImageView mImageViewPoster;
-    @BindView(R.id.movie_details) View mMovieDetails;
     @BindView(R.id.button) Button mButtonFavourite;
 
     @BindView(R.id.recycler_view_trailers) RecyclerView mReciclerViewTrailers;
@@ -57,6 +56,7 @@ public class DetailActivity extends AppCompatActivity
 
     private int mMovieID;
     MoviesInterface trailersInstance;
+    private DetailMovieAdapter posterAdapter;
 
 
     @Override
@@ -90,6 +90,13 @@ public class DetailActivity extends AppCompatActivity
         }
 
         retrofitStartSync();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mReciclerViewTrailers.setLayoutManager(linearLayoutManager);
+        mReciclerViewTrailers.setVisibility(View.VISIBLE);
+
+        posterAdapter = new DetailMovieAdapter();
+        mReciclerViewTrailers.setAdapter(posterAdapter);
 
     }
 
@@ -137,13 +144,13 @@ public class DetailActivity extends AppCompatActivity
         }.execute(String.valueOf(mMovieID));
 
         mButtonFavourite.setText(getString(R.string.button_favourite_label_setted));
+        mButtonFavourite.setBackgroundColor(R.color.colorPrimary);
         mButtonFavourite.setClickable(false);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        mMovieDetails.setVisibility(View.INVISIBLE);
 
 
         switch (id){
@@ -186,8 +193,10 @@ public class DetailActivity extends AppCompatActivity
         String releaseDate = data.getString(INDEX_RELEASE_DATE);
         String userRating = data.getString(INDEX_VOTE_AVERAGE);
         String urlImage = data.getString(INDEX_POSTER);
+
         if(data.getInt(INDEX_IS_FAVOURITE)>= MoviesDBUtility.IS_TRUE){
             mButtonFavourite.setClickable(false);
+            mButtonFavourite.setBackgroundColor(R.color.colorPrimary);
             mButtonFavourite.setText(getString(R.string.button_favourite_label_setted));
         }
 
@@ -201,7 +210,6 @@ public class DetailActivity extends AppCompatActivity
             .error(R.drawable.placeholder_error)
             .into(mImageViewPoster);
 
-        mMovieDetails.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -220,7 +228,7 @@ public class DetailActivity extends AppCompatActivity
 
         TrailersResults data = response.body();
 
-        setUpRecyclerView(data);
+        posterAdapter.setData(data.getTrailers());
     }
 
     private void setUpRecyclerView(TrailersResults data) {
