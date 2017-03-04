@@ -253,8 +253,8 @@ public class MoviesProvider extends ContentProvider {
                 numRowsUpdated = mDBHelper.getWritableDatabase().update(
                         MovieEntry.NAME_TABLE,
                         values,
-                        "_id=" + MovieEntry._ID,
-                        null
+                        MovieEntry.MOVIE_ID + " = ?",
+                        selectionArgs
                 );
 
                 break;

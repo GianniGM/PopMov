@@ -22,4 +22,5 @@
     <string name="button_favourite_label">Mark as Favourite</string>
     <string name="play_trailer_description">Play Trailer on Youtube</string>
     <string name="tool_play_trailer_text">play Trailer</string>
+    <string name="button_favourite_label_setted">Favuorite!</string>
 </resources>

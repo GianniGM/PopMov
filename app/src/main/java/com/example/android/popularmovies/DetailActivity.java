@@ -1,8 +1,10 @@
 package com.example.android.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -10,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.data.MoviesContract;
+import com.example.android.popularmovies.data.MoviesDBUtility;
 import com.squareup.picasso.Picasso;
 
 
@@ -34,8 +38,9 @@ public class DetailActivity extends AppCompatActivity
     @BindView(R.id.tv_release_date) TextView mReleaseDate;
     @BindView(R.id.iv_image_detail) ImageView mImageViewPoster;
     @BindView(R.id.movie_details) View mMovieDetails;
+    @BindView(R.id.button) Button mButtonFavourite;
 
-    private int mMovie_ID;
+    private int mMovieID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,7 @@ public class DetailActivity extends AppCompatActivity
         if(intentThatStartedThis != null){
             if(intentThatStartedThis.hasExtra(Intent.EXTRA_TEXT)){
 
-                 mMovie_ID = Integer.parseInt(intentThatStartedThis.getStringExtra(Intent.EXTRA_TEXT));
+                 mMovieID = Integer.parseInt(intentThatStartedThis.getStringExtra(Intent.EXTRA_TEXT));
             }
         }
 
@@ -57,7 +62,6 @@ public class DetailActivity extends AppCompatActivity
         //1. controllare che non sia tra i favoriti
         //2. se è tra i favoriti cambiare il testo del pulsante
         //3. altrimenti lasciare così com'è
-
 
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader loader = loaderManager.getLoader(ID_MOVIE_DETAILS_LOADER);
@@ -74,6 +78,33 @@ public class DetailActivity extends AppCompatActivity
         //1. se è tra i favoriti settare a zero nel database
         //2. altrimenti settare a uno
         //3. aggiornare il database
+        // dovrebbe essere un update
+
+        final Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
+                .build();
+        final Context ctx = this;
+
+        new AsyncTask<String, Void, Void>(){
+            private final static String TAG = "ASYNC_TASK";
+            private int updated;
+
+            @Override
+            protected Void doInBackground(String... params) {
+
+                updated= MoviesDBUtility.updateDB(uri, ctx, params[0]);
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                Log.d(TAG, "updated: "+ updated);
+            }
+        }.execute(String.valueOf(mMovieID));
+
+        mButtonFavourite.setText(getString(R.string.button_favourite_label_setted));
+        mButtonFavourite.setClickable(false);
     }
 
     @Override
@@ -85,7 +116,7 @@ public class DetailActivity extends AppCompatActivity
             case ID_MOVIE_DETAILS_LOADER:
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
                         .appendPath(NAME_PATH_ID)
-                        .appendPath(String.valueOf(mMovie_ID))
+                        .appendPath(String.valueOf(mMovieID))
                         .build();
 
                 Log.e(TAG, uri.toString());
@@ -119,8 +150,11 @@ public class DetailActivity extends AppCompatActivity
         String overview = data.getString(INDEX_OVERVIEW);
         String releaseDate = data.getString(INDEX_RELEASE_DATE);
         String userRating = data.getString(INDEX_VOTE_AVERAGE);
-//        String movieId = data.getString(INDEX_MOVIE_ID);
         String urlImage = data.getString(INDEX_POSTER);
+        if(data.getInt(INDEX_IS_FAVOURITE)>= MoviesDBUtility.IS_TRUE){
+            mButtonFavourite.setClickable(false);
+            mButtonFavourite.setText(getString(R.string.button_favourite_label_setted));
+        }
 
         mTitleTextView.setText(title);
         mOverviewMovie.setText(overview);

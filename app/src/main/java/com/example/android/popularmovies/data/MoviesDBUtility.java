@@ -22,12 +22,13 @@ public class MoviesDBUtility {
 
     //TODO MIGLIORARE STA ROBA QUA
     public static final String[] MOVIE_PROJECTION = {
-            MoviesContract.MovieEntry.POSTER,
-            MoviesContract.MovieEntry.MOVIE_ID,
-            MoviesContract.MovieEntry.ORIGINAL_TITLE,
-            MoviesContract.MovieEntry.VOTE_AVERAGE,
-            MoviesContract.MovieEntry.OVERVIEW,
-            MoviesContract.MovieEntry.RELEASE_DATE,
+            MovieEntry.POSTER,
+            MovieEntry.MOVIE_ID,
+            MovieEntry.ORIGINAL_TITLE,
+            MovieEntry.VOTE_AVERAGE,
+            MovieEntry.OVERVIEW,
+            MovieEntry.RELEASE_DATE,
+            MovieEntry.IS_FAVOURITE,
     };
 
     public static final int INDEX_POSTER = 0;
@@ -36,9 +37,31 @@ public class MoviesDBUtility {
     public static final int INDEX_VOTE_AVERAGE = 3;
     public static final int INDEX_OVERVIEW = 4;
     public static final int INDEX_RELEASE_DATE = 5;
+    public static final int INDEX_IS_FAVOURITE = 6;
+
+    public static final int IS_TRUE = 1;
+
 
     public static final String NAME_PATH_BEST = "best";
     public static final String NAME_PATH_ID = "id";
+
+    public static int updateDB(Uri uri, Context ctx, String MovieId){
+
+        ContentValues contentValues = new ContentValues();
+        ContentResolver contentResolver = ctx.getContentResolver();
+        String[] selectionArgs = new String[]{MovieId};
+
+        contentValues.put(MovieEntry.IS_FAVOURITE, IS_TRUE);
+
+        int updated =  contentResolver.update(
+                uri,
+                contentValues,
+                null,
+                selectionArgs
+        );
+
+        return updated;
+    }
 
     public static int addInDB(Uri uri, Movies body, Context ctx){
         Movie[] moviesArray = body.getMovies();
