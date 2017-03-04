@@ -13,8 +13,18 @@ import retrofit2.http.Query;
 
 public interface MoviesInterface {
     @GET("{type}/{request}")
-    Call<Movies> downloadMoviesData(@Path("type") String type,
-                                   @Path("request") String request,
-                                   @Query(NetworkUtilities.QUERY_APY_KEY) String api_key);
+    Call<Movies> downloadMoviesData(
+            @Path("type") String type,
+            @Path("request") String request,
+            @Query(NetworkUtilities.QUERY_APY_KEY) String api_key
+    );
+
+    @GET("movie/{id}/videos")
+    Call<TrailersResults> getTrailers(
+            @Path("id") String movieID,
+            @Query(NetworkUtilities.QUERY_APY_KEY) String api_key
+    );
+
+//    Call<ReviewsResults> getReviews(@Path("id") String movieID);
 
 }

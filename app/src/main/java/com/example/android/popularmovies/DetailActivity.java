@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.TransactionTooLargeException;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,16 +20,25 @@ import android.widget.TextView;
 
 import com.example.android.popularmovies.data.MoviesContract;
 import com.example.android.popularmovies.data.MoviesDBUtility;
+import com.example.android.popularmovies.movies.MoviesInterface;
+import com.example.android.popularmovies.movies.TrailersResults;
+import com.example.android.popularmovies.utilities.NetworkUtilities;
 import com.squareup.picasso.Picasso;
 
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.android.popularmovies.data.MoviesDBUtility.*;
 
 public class DetailActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>  {
+        implements LoaderManager.LoaderCallbacks<Cursor>,
+        Callback<TrailersResults>{
 
     private static final String TAG = DetailActivity.class.getSimpleName();
     private static final int ID_MOVIE_DETAILS_LOADER = 78945;
@@ -40,7 +51,13 @@ public class DetailActivity extends AppCompatActivity
     @BindView(R.id.movie_details) View mMovieDetails;
     @BindView(R.id.button) Button mButtonFavourite;
 
+    @BindView(R.id.recycler_view_trailers) RecyclerView mReciclerViewTrailers;
+
+    //TODO AGGIUNGERE UNA PROGRESS BAR
+
     private int mMovieID;
+    MoviesInterface trailersInstance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +88,22 @@ public class DetailActivity extends AppCompatActivity
         }else{
             loaderManager.restartLoader(ID_MOVIE_DETAILS_LOADER, null, this);
         }
+
+        retrofitStartSync();
+
+    }
+
+    public void retrofitStartSync(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(NetworkUtilities.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        trailersInstance = retrofit.create(MoviesInterface.class);
+
+        trailersInstance.getTrailers(String.valueOf(mMovieID), NetworkUtilities.api_key).enqueue(this);
+        Log.d(TAG, "MOVIE ID TRAILER LAUNCHED" + String.valueOf(mMovieID));
+
     }
 
     public void clickedMarkAsFavourite(View view) {
@@ -112,6 +145,7 @@ public class DetailActivity extends AppCompatActivity
 
         mMovieDetails.setVisibility(View.INVISIBLE);
 
+
         switch (id){
             case ID_MOVIE_DETAILS_LOADER:
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
@@ -135,6 +169,7 @@ public class DetailActivity extends AppCompatActivity
             default:
                 throw new RuntimeException("Loader Not Implemented" + id);
         }
+
     }
 
     @Override
@@ -172,5 +207,34 @@ public class DetailActivity extends AppCompatActivity
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onResponse(Call<TrailersResults> call, Response<TrailersResults> response) {
+
+        Log.e(TAG, "looking for data trailers");
+        if(!response.isSuccessful()){
+            Log.e(TAG, "Unable to connect");
+            return;
+        }
+
+        TrailersResults data = response.body();
+
+        setUpRecyclerView(data);
+    }
+
+    private void setUpRecyclerView(TrailersResults data) {
+        TrailersResults.Trailer[] trailers = data.getTrailers();
+        for(TrailersResults.Trailer t : trailers){
+            Log.d(TAG, t.getMovieName()+ " " + t.getKey() + " " + t.getTrailerID());
+        }
+    }
+
+    @Override
+    public void onFailure(Call<TrailersResults> call, Throwable t) {
+        if (!call.isCanceled())
+            call.cancel();
+
+        Log.e(TAG, "FAILING ON DOWNLOAD TRAILERS", t);
     }
 }
