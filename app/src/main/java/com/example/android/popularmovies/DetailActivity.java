@@ -2,10 +2,13 @@ package com.example.android.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +29,9 @@ import com.example.android.popularmovies.utilities.NetworkUtilities;
 import com.squareup.picasso.Picasso;
 
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -38,10 +44,15 @@ import static com.example.android.popularmovies.data.MoviesDBUtility.*;
 
 public class DetailActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
-        Callback<TrailersResults>{
+        Callback<TrailersResults>,
+        DetailMovieAdapter.InterfaceOnClickHandler{
 
     private static final String TAG = DetailActivity.class.getSimpleName();
     private static final int ID_MOVIE_DETAILS_LOADER = 78945;
+
+    private int accent;
+    private int primary;
+
 
     @BindView(R.id.tv_title_textview) TextView mTitleTextView;
     @BindView(R.id.tv_overview) TextView mOverviewMovie;
@@ -55,6 +66,8 @@ public class DetailActivity extends AppCompatActivity
     //TODO AGGIUNGERE UNA PROGRESS BAR
 
     private int mMovieID;
+    private AtomicBoolean mIsFavourite = new AtomicBoolean(false);
+
     MoviesInterface trailersInstance;
     private DetailMovieAdapter posterAdapter;
 
@@ -65,6 +78,9 @@ public class DetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_detail);
 
         ButterKnife.bind(this, this);
+
+        accent = ContextCompat.getColor(this, R.color.colorAccent);
+        primary = ContextCompat.getColor(this, R.color.colorPrimary);
 
         Intent intentThatStartedThis = getIntent();
 
@@ -95,9 +111,10 @@ public class DetailActivity extends AppCompatActivity
         mReciclerViewTrailers.setLayoutManager(linearLayoutManager);
         mReciclerViewTrailers.setVisibility(View.VISIBLE);
 
-        posterAdapter = new DetailMovieAdapter();
+        posterAdapter = new DetailMovieAdapter(this);
         mReciclerViewTrailers.setAdapter(posterAdapter);
 
+        mButtonFavourite.setClickable(false);
     }
 
     public void retrofitStartSync(){
@@ -124,14 +141,24 @@ public class DetailActivity extends AppCompatActivity
                 .build();
         final Context ctx = this;
 
-        new AsyncTask<String, Void, Void>(){
+
+        if(mIsFavourite.get()) {
+            mButtonFavourite.setText(getString(R.string.button_favourite_on));
+            mButtonFavourite.setBackgroundColor(accent);
+            mIsFavourite.set(false);
+        }else {
+            mButtonFavourite.setText(getString(R.string.favourite_button_off));
+            mButtonFavourite.setBackgroundColor(primary);
+            mIsFavourite.set(true);
+
+        new AsyncTask<String, Void, Void>() {
             private final static String TAG = "ASYNC_TASK";
             private int updated;
 
             @Override
             protected Void doInBackground(String... params) {
 
-                updated= MoviesDBUtility.updateDB(uri, ctx, params[0]);
+                updated = MoviesDBUtility.updateDB(uri, ctx, params[0], mIsFavourite.get());
 
                 return null;
             }
@@ -139,13 +166,13 @@ public class DetailActivity extends AppCompatActivity
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Log.d(TAG, "updated: "+ updated);
+                Log.d(TAG, "updated: " + updated);
             }
         }.execute(String.valueOf(mMovieID));
 
-        mButtonFavourite.setText(getString(R.string.button_favourite_label_setted));
-        mButtonFavourite.setBackgroundColor(R.color.colorPrimary);
-        mButtonFavourite.setClickable(false);
+
+        }
+
     }
 
     @Override
@@ -195,10 +222,16 @@ public class DetailActivity extends AppCompatActivity
         String urlImage = data.getString(INDEX_POSTER);
 
         if(data.getInt(INDEX_IS_FAVOURITE)>= MoviesDBUtility.IS_TRUE){
-            mButtonFavourite.setClickable(false);
-            mButtonFavourite.setBackgroundColor(R.color.colorPrimary);
-            mButtonFavourite.setText(getString(R.string.button_favourite_label_setted));
+            mButtonFavourite.setText(getString(R.string.favourite_button_off));
+            mButtonFavourite.setBackgroundColor(primary);
+            mIsFavourite.set(true);
+        }else{
+            mButtonFavourite.setText(getString(R.string.button_favourite_on));
+            mButtonFavourite.setBackgroundColor(accent);
+            mIsFavourite.set(false);
         }
+
+        mButtonFavourite.setClickable(true);
 
         mTitleTextView.setText(title);
         mOverviewMovie.setText(overview);
@@ -231,18 +264,30 @@ public class DetailActivity extends AppCompatActivity
         posterAdapter.setData(data.getTrailers());
     }
 
-    private void setUpRecyclerView(TrailersResults data) {
-        TrailersResults.Trailer[] trailers = data.getTrailers();
-        for(TrailersResults.Trailer t : trailers){
-            Log.d(TAG, t.getMovieName()+ " " + t.getKey() + " " + t.getTrailerID());
-        }
-    }
-
     @Override
     public void onFailure(Call<TrailersResults> call, Throwable t) {
         if (!call.isCanceled())
             call.cancel();
 
         Log.e(TAG, "FAILING ON DOWNLOAD TRAILERS", t);
+    }
+
+    @Override
+    public void onClick(TrailersResults.Trailer trailer) {
+
+        Uri video = Uri.parse("http://www.youtube.com/watch?v="+trailer.getKey());
+        Log.d(TAG, video.toString());
+        Intent intent = new Intent(Intent.ACTION_VIEW, video);
+
+        // Verify it resolves
+        PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+        boolean isIntentSafe = activities.size() > 0;
+
+        // Start an activity if it's safe
+        if (isIntentSafe) {
+            startActivity(intent);
+        }
+
     }
 }

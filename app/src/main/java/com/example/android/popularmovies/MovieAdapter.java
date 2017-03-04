@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.android.popularmovies.movies.TrailersResults;
 import com.squareup.picasso.Picasso;
 
 import static com.example.android.popularmovies.data.MoviesDBUtility.INDEX_MOVIE_ID;

@@ -40,18 +40,21 @@ public class MoviesDBUtility {
     public static final int INDEX_IS_FAVOURITE = 6;
 
     public static final int IS_TRUE = 1;
-
+    private static final int IS_FALSE = 0;
 
     public static final String NAME_PATH_BEST = "best";
     public static final String NAME_PATH_ID = "id";
 
-    public static int updateDB(Uri uri, Context ctx, String MovieId){
+    public static int updateDB(Uri uri, Context ctx, String MovieId,boolean favourite){
 
         ContentValues contentValues = new ContentValues();
         ContentResolver contentResolver = ctx.getContentResolver();
         String[] selectionArgs = new String[]{MovieId};
 
-        contentValues.put(MovieEntry.IS_FAVOURITE, IS_TRUE);
+        if(favourite)
+            contentValues.put(MovieEntry.IS_FAVOURITE, IS_TRUE);
+        else
+            contentValues.put(MovieEntry.IS_FAVOURITE, IS_FALSE);
 
         int updated =  contentResolver.update(
                 uri,

@@ -10,14 +10,26 @@ import android.widget.TextView;
 
 import com.example.android.popularmovies.movies.TrailersResults;
 
+import static com.example.android.popularmovies.data.MoviesDBUtility.INDEX_MOVIE_ID;
+
 /**
  * Created by giannig on 3/4/17.
  */
 
 public class DetailMovieAdapter extends RecyclerView.Adapter<DetailMovieAdapter.DetailMovieAdapterViewHolder> {
 
+    private final InterfaceOnClickHandler mClickHandler;
     private Context ctx;
     private TrailersResults.Trailer[] mData;
+
+
+    public interface InterfaceOnClickHandler{
+        void onClick(TrailersResults.Trailer trailer);
+    }
+
+    public DetailMovieAdapter(InterfaceOnClickHandler clickHandler){
+        mClickHandler = clickHandler;
+    }
 
 
     public void setData(TrailersResults.Trailer[] trailers){
@@ -66,6 +78,9 @@ public class DetailMovieAdapter extends RecyclerView.Adapter<DetailMovieAdapter.
         public void onClick(View v) {
             //lanciare l'intent esplicito
             Log.d("CLICK", "click");
+
+            TrailersResults.Trailer trailer = mData[getAdapterPosition()];
+            mClickHandler.onClick(trailer);
         }
     }
 }
