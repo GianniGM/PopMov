@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.pb_loading_data) ProgressBar mLoadingData;
     @BindView(R.id.tv_error_msg) TextView mErrorMessageTextView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements
         Intent intentToStartActivity = new Intent(ctx, destClass);
         intentToStartActivity.putExtra(Intent.EXTRA_TEXT, movieID);
         startActivity(intentToStartActivity);
-
     }
 
     @Override

@@ -83,11 +83,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
         @Override
         public void onClick(View v) {
-
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
             String movieID = mCursor.getString(INDEX_MOVIE_ID);
             mClickHandler.onClick(movieID);
         }
+
     }
 }

@@ -47,6 +47,7 @@ public class MovieSync implements Callback<Movies>{
         instance = buildMovieInstance();
         loadMovieData(TYPE);
         context = ctx;
+
     }
 
     private void Stop(){
@@ -79,6 +80,7 @@ public class MovieSync implements Callback<Movies>{
 
 
         switch (TYPE){
+
             case NetworkUtilities.POPULAR:
 
                 Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()

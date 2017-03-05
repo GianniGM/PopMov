@@ -2,7 +2,6 @@ package com.example.android.popularmovies.sync;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -19,11 +18,22 @@ import com.firebase.jobdispatcher.Trigger;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.example.android.popularmovies.data.MoviesDBUtility.NAME_PATH_BEST;
+
 /**
  * Created by giannig on 3/3/17.
  */
 
 public class PopMoviesSyncUtils {
+
+        private static final String TAG = PopMoviesIntentService.class.getSimpleName();
+
+
+//    private static final int SYNC_INTERVAL_MINUTES = 1;
+//    private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.MINUTES.toSeconds(SYNC_INTERVAL_MINUTES);
+//    private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
+
+
     private static final int SYNC_INTERVAL_HOURS = 3;
     private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS);
     private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
@@ -82,7 +92,12 @@ public class PopMoviesSyncUtils {
             public void run() {
 
                 /* URI for every row of weather data in our weather table*/
-                Uri forecastQueryUri = MoviesContract.MovieEntry.CONTENT_URI;
+
+                Uri uri = MoviesContract.MovieEntry.CONTENT_URI.buildUpon()
+                        .appendPath(NAME_PATH_BEST)
+                        .appendPath(MoviesContract.MovieEntry.IS_MOST_POPULAR)
+                        .build();
+
 
                 /*
                  * Since this query is going to be used only as a check to see if we have any
@@ -95,7 +110,7 @@ public class PopMoviesSyncUtils {
 
                 /* Here, we perform the query to check to see if we have any weather data */
                 Cursor cursor = ctx.getContentResolver().query(
-                        forecastQueryUri,
+                        uri,
                         projectionColumns,
                         selectionStatement,
                         null,
