@@ -23,4 +23,6 @@
     <string name="play_trailer_description">Play Trailer on Youtube</string>
     <string name="tool_play_trailer_text">play Trailer</string>
     <string name="favourite_button_off">You like it!</string>
+    <string name="review">Reviews</string>
+    <string name="no_reviews_error">No Reviews for this movie</string>
 </resources>

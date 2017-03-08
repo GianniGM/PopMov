@@ -26,6 +26,9 @@ public interface MoviesInterface {
     );
 
     @GET("movie/{id}/reviews")
-    Call<ReviewsResults> getReviews(@Path("id") String movieID);
+    Call<ReviewsResults> getReviews(
+            @Path("id") String movieID,
+            @Query(NetworkUtilities.QUERY_APY_KEY) String api_key
+    );
 
 }

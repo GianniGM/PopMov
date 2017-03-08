@@ -50,18 +50,6 @@ public class ReviewsResults implements Results {
         @Expose
         private String content;
 
-        @SerializedName("media_id")
-        @Expose
-        private String media_id;
-
-        @SerializedName("media_title")
-        @Expose
-        private String media_title;
-
-        @SerializedName("media_type")
-        @Expose
-        private String media_type;
-
         @SerializedName("url")
         @Expose
         private String url;
@@ -88,30 +76,6 @@ public class ReviewsResults implements Results {
 
         public void setContent(String content) {
             this.content = content;
-        }
-
-        public String getMedia_id() {
-            return media_id;
-        }
-
-        public void setMedia_id(String media_id) {
-            this.media_id = media_id;
-        }
-
-        public String getMedia_title() {
-            return media_title;
-        }
-
-        public void setMedia_title(String media_title) {
-            this.media_title = media_title;
-        }
-
-        public String getMedia_type() {
-            return media_type;
-        }
-
-        public void setMedia_type(String media_type) {
-            this.media_type = media_type;
         }
 
         public String getUrl() {

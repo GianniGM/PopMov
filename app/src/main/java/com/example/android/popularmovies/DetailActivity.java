@@ -16,6 +16,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -69,8 +72,19 @@ public class DetailActivity extends AppCompatActivity
     private AtomicBoolean mIsFavourite = new AtomicBoolean(false);
 
     MoviesInterface trailersInstance;
-    private DetailMovieAdapter posterAdapter;
+    private DetailMovieAdapter detailMovieAdapter;
 
+//    @Override
+//    public void onBackPressed() {
+//        int count = getFragmentManager().getBackStackEntryCount();
+//
+//        if (count == 0) {
+//            super.onBackPressed();
+//            //additional code
+//        } else {
+//            getFragmentManager().popBackStack();
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +105,6 @@ public class DetailActivity extends AppCompatActivity
             }
         }
 
-        //TODO
-        //1. controllare che non sia tra i favoriti
-        //2. se è tra i favoriti cambiare il testo del pulsante
-        //3. altrimenti lasciare così com'è
 
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader loader = loaderManager.getLoader(ID_MOVIE_DETAILS_LOADER);
@@ -111,8 +121,8 @@ public class DetailActivity extends AppCompatActivity
         mReciclerViewTrailers.setLayoutManager(linearLayoutManager);
         mReciclerViewTrailers.setVisibility(View.VISIBLE);
 
-        posterAdapter = new DetailMovieAdapter(this);
-        mReciclerViewTrailers.setAdapter(posterAdapter);
+        detailMovieAdapter = new DetailMovieAdapter(this);
+        mReciclerViewTrailers.setAdapter(detailMovieAdapter);
 
         mButtonFavourite.setClickable(false);
     }
@@ -128,6 +138,29 @@ public class DetailActivity extends AppCompatActivity
         trailersInstance.getTrailers(String.valueOf(mMovieID), NetworkUtilities.api_key).enqueue(this);
         Log.d(TAG, "MOVIE ID TRAILER LAUNCHED" + String.valueOf(mMovieID));
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.action_review){
+            Context ctx = this;
+            Class destClass = ReviewsActivity.class;
+
+            Intent intentToStartActivity = new Intent(ctx, destClass);
+            intentToStartActivity.putExtra(Intent.EXTRA_TEXT, String.valueOf(mMovieID));
+            startActivity(intentToStartActivity);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void clickedMarkAsFavourite(View view) {
@@ -261,7 +294,7 @@ public class DetailActivity extends AppCompatActivity
 
         TrailersResults data = response.body();
 
-        posterAdapter.setData((TrailersResults.Trailer[]) data.getData());
+        detailMovieAdapter.setData((TrailersResults.Trailer[]) data.getData());
     }
 
     @Override
