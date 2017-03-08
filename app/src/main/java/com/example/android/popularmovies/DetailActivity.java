@@ -295,7 +295,7 @@ public class DetailActivity extends AppCompatActivity
     @Override
     public void onClick(TrailersResults.Trailer trailer) {
 
-        Uri video = Uri.parse("http://www.youtube.com/watch?v="+trailer.getKey());
+        Uri video = Uri.parse(NetworkUtilities.YOUTUBE_URL +trailer.getKey());
         Log.d(TAG, video.toString());
         Intent intent = new Intent(Intent.ACTION_VIEW, video);
 

@@ -25,4 +25,5 @@
     <string name="favourite_button_off">You like it!</string>
     <string name="review">Reviews</string>
     <string name="no_reviews_error">No Reviews for this movie</string>
+    <string name="my_favourite">My Favourite</string>
 </resources>
