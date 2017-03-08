@@ -1,51 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_title_textview"
+        style="@style/Base.TextAppearance.AppCompat.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_title_textview"
-        android:gravity="center"
-        style="@style/Base.TextAppearance.AppCompat.Title"
-        android:padding="16dp"
         android:background="@color/colorAccent"
-        tools:text="Interstellar"
+        android:gravity="center"
+        android:padding="16dp"
         android:textColor="@android:color/background_light"
         android:textSize="36sp"
-        />
+        tools:text="Interstellar" />
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
 
 
-        <ScrollView
+        <include
+            layout="@layout/movie_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:focusable="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/include2" />
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/trailers_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/scroll_description_view" >
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:orientation="vertical">
+            android:focusable="false"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2" />
 
-
-            <include layout="@layout/movie_details"
-                android:layout_marginBottom="8dp"
-                android:focusable="false"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <include layout="@layout/trailers_list"
-                android:layout_width="match_parent"
-                android:focusable="false"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-    </ScrollView>
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
 </LinearLayout>

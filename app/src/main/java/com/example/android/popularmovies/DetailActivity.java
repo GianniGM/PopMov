@@ -261,7 +261,7 @@ public class DetailActivity extends AppCompatActivity
 
         TrailersResults data = response.body();
 
-        posterAdapter.setData(data.getTrailers());
+        posterAdapter.setData((TrailersResults.Trailer[]) data.getData());
     }
 
     @Override
