@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by giannig on 3/4/17.
  */
-public class TrailersResults {
+public class TrailersResults implements Results {
 
     @SerializedName("id")
     @Expose
@@ -16,21 +16,24 @@ public class TrailersResults {
     @Expose
     private Trailer[] trailers;
 
-
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    public Trailer[] getTrailers() {
+    @Override
+    public Object getData() {
         return trailers;
     }
 
-    public void setTrailers(Trailer[] trailers) {
-        this.trailers = trailers;
+    @Override
+    public void setData(Object[] data) {
+        this.trailers = (Trailer[]) data;
     }
 
     public class Trailer{
