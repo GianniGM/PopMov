@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.android.popularmovies.movies.TrailersResults;
 
+import java.util.ArrayList;
+
 import static com.example.android.popularmovies.data.MoviesDBUtility.INDEX_MOVIE_ID;
 
 /**
