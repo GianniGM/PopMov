@@ -135,6 +135,13 @@ public class MainActivity extends AppCompatActivity implements
             mErrorMessageTextView.setVisibility(View.GONE);
         }
 
+        if(id == R.id.action_favourite){
+            status = MoviesContract.MovieEntry.IS_FAVOURITE;
+            getSupportLoaderManager().restartLoader(ID_MOVIE_LOADER, null, this);
+            mLoadingData.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+            mErrorMessageTextView.setVisibility(View.GONE);
+        }
         return super.onOptionsItemSelected(item);
     }
 

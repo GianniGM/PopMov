@@ -74,17 +74,6 @@ public class DetailActivity extends AppCompatActivity
     MoviesInterface trailersInstance;
     private DetailMovieAdapter detailMovieAdapter;
 
-//    @Override
-//    public void onBackPressed() {
-//        int count = getFragmentManager().getBackStackEntryCount();
-//
-//        if (count == 0) {
-//            super.onBackPressed();
-//            //additional code
-//        } else {
-//            getFragmentManager().popBackStack();
-//        }
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +172,7 @@ public class DetailActivity extends AppCompatActivity
             mButtonFavourite.setText(getString(R.string.favourite_button_off));
             mButtonFavourite.setBackgroundColor(primary);
             mIsFavourite.set(true);
+        }
 
         new AsyncTask<String, Void, Void>() {
             private final static String TAG = "ASYNC_TASK";
@@ -202,9 +192,6 @@ public class DetailActivity extends AppCompatActivity
                 Log.d(TAG, "updated: " + updated);
             }
         }.execute(String.valueOf(mMovieID));
-
-
-        }
 
     }
 
@@ -308,7 +295,7 @@ public class DetailActivity extends AppCompatActivity
     @Override
     public void onClick(TrailersResults.Trailer trailer) {
 
-        Uri video = Uri.parse("http://www.youtube.com/watch?v="+trailer.getKey());
+        Uri video = Uri.parse(NetworkUtilities.YOUTUBE_URL +trailer.getKey());
         Log.d(TAG, video.toString());
         Intent intent = new Intent(Intent.ACTION_VIEW, video);
 
